@@ -3,3 +3,4 @@ djangorestframework
 dj-static
 django-appconf
 django-compressor
+Pillow
