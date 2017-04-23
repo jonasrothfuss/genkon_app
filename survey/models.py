@@ -43,7 +43,7 @@ class Profile(models.Model):
   def __str__(self):
     return self.first_name + " " + self.last_name
 
-class Service_Choice_Scores(models.Model):
+class Service_Choice_Score(models.Model):
   service = models.ForeignKey(Service, on_delete=models.CASCADE)
   choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
   score = models.IntegerField()
