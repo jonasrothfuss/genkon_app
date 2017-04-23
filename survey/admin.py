@@ -8,7 +8,7 @@ class ChoiceInline(admin.TabularInline):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-  fields = ['question_text', 'question_type']
+  fields = ['question_identifier', 'question_text', 'question_type']
   inlines = [ChoiceInline]
 
 
