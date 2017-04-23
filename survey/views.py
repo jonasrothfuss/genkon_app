@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import *
 
 def index(request):
   context = {}
@@ -11,3 +12,8 @@ def interests(request):
 def skills(request):
   context = {}
   return render(request, 'survey/skills.html', context)
+
+def results(request):
+  matched_services_list = Service.objects.all()
+  context = {'matched_services_list':  matched_services_list}
+  return render(request, 'survey/results.html', context)
