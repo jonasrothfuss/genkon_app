@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework',
     'survey.apps.SurveyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
