@@ -7,6 +7,9 @@
 # SQLite3 database
 *.sqlite3
 
+#IDE Files
+.idea/
+
 # Node modules
 node_modules/
 
