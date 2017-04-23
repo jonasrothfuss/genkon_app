@@ -2,8 +2,8 @@
 
 ## Installation
 
-*NOTE: Requires [python3] (https://www.python.org/download/releases/3.0/),
-[Node.js](http://nodejs.org/).*
+*NOTE: Requires [python3](https://www.python.org/download/releases/3.0/),*
+[Node.js](http://nodejs.org/)
 
 * `$ git clone https://github.com/jonasrothfuss/genkon_app.git`
 * `$ cd genkon_app/`
