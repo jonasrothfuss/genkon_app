@@ -22,6 +22,6 @@ def skills(request):
   return render(request, 'survey/skills.html', context)
 
 def results(request):
-  matched_services_list = Service.objects.all()
+  matched_services_list = Service.objects.all()[:4]
   context = {'matched_services_list':  matched_services_list}
   return render(request, 'survey/results.html', context)
