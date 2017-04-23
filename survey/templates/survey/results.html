@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+
+{% block body %}
+
+<div class="container">
+
+    
+<div class="jumbotron">
+  
+{% if matched_services_list %}
+    <ul>
+    {% for service in matched_services_list %}
+        <li>{{service.service_name}}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No services were found.</p>
+{% endif %}
+    
+</div>
+</div>
+
+{% endblock %}
