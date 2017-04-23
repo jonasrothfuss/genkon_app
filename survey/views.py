@@ -7,3 +7,7 @@ def index(request):
 def interests(request):
   context = {}
   return render(request, 'survey/interests.html', context)
+
+def skills(request):
+  context = {}
+  return render(request, 'survey/skills.html', context)

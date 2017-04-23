@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+
+
+{% block body %}
+
+<div class="container">
+
+    
+<div class="jumbotron">
+<h2>Welche Fähigkeiten möchtest du einbringen?</h2>
+<div class="row">
+    <div class="col-xs-12"> 
+        <p><select class="form-control">
+  <option> </option>            
+  <option>Führerschein</option>
+  <option>Einfühlungsvermögen</option>
+  <option>Handwerkliche Fähigkeiten</option>
+  <option>Flexibilität</option>
+  <option>Kochen oder Backen</option>
+  <option>Medizinische Ausbildung</option>
+  <option>Sprachkenntnisse</option>
+  <option>Video und Ton‐Technik</option>
+            </select></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12"> 
+        <p><select class="form-control">
+  <option> </option>   
+  <option>Führerschein</option>
+  <option>Einfühlungsvermögen</option>
+  <option>Handwerkliche Fähigkeiten</option>
+  <option>Flexibilität</option>
+  <option>Kochen oder Backen</option>
+  <option>Medizinische Ausbildung</option>
+  <option>Sprachkenntnisse</option>
+  <option>Video und Ton‐Technik</option>
+            </select></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12"> 
+        <p><select class="form-control">
+  <option> </option>     
+  <option>Führerschein</option>
+  <option>Einfühlungsvermögen</option>
+  <option>Handwerkliche Fähigkeiten</option>
+  <option>Flexibilität</option>
+  <option>Kochen oder Backen</option>
+  <option>Medizinische Ausbildung</option>
+  <option>Sprachkenntnisse</option>
+  <option>Video und Ton‐Technik</option>
+            </select></p>
+    </div>
+</div>
+</div>
+    
+<div class="jumbotron">
+<h2>Wie oft möchtest Du dich einbringen?</h2>
+<div class="row">            
+    <div class="col-xs-12"> 
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Spontan
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Gelegentlich
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> Regelmäßig
+        </label>
+    </div>
+</div>   
+<p></p>
+    
+<div class="row">
+    <div class="col-xs-12">
+        <p><a class="btn btn-lg btn-success" href="{% url 'interests' %}" role="button">Zurück</a>
+        <a class="btn btn-lg btn-success" href="{% url 'index' %}" role="button">Auswerten</a></p>
+    </div>
+            
+</div>
+</div>        
+
+</div>
+
+{% endblock %}
