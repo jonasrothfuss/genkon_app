@@ -6,20 +6,26 @@
 
 <div class="container">
 
-    
-<div class="jumbotron">
   
 {% if matched_services_list %}
-    <ul>
     {% for service in matched_services_list %}
-        <li>{{service.service_name}}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No services were found.</p>
-{% endif %}
     
-</div>
+<div class="jumbotron">
+    <p class="bg-primary">
+    <large>{{service.service_title}}</large>
+    </p>
+    <img src="/static/images/{{service.service_image}}" alt="My image"/>
+    <p class="bg-primary">
+    <small>{{service.service_subtitle}}</small>
+    </p>
+    <button type="button" class="btn btn-lg btn-success">Mehr lesen</button>
+    <button type="button" class="btn btn-lg btn-success">Anfragen</button>
+</div>    
+    {% endfor %}
+    
+{% else %}
+    <p>Leider konnten keine Ergebnisse für Deine Antworten gefunden werden.</p>
+{% endif %}
 </div>
 
 {% endblock %}
