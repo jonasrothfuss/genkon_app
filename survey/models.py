@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Question(models.Model):
@@ -33,16 +34,16 @@ class Service(models.Model):
     return self.service_name
 
 class Profile(models.Model):
-  date_posted = models.DateField()
-  first_name = models.CharField(max_length=30)
-  last_name = models.CharField(max_length=50)
-  email = models.EmailField()
-  phone_number = models.CharField(max_length=20)
-  occupation = models.CharField(max_length=40)
-  street = models.CharField(max_length=100)
-  zip_code = models.CharField(max_length=10)
-  city = models.CharField(max_length=40)
-  message = models.CharField(max_length=1000)
+  date_posted = models.DateField("Erstellugsdatum", default=timezone.now)
+  first_name = models.CharField("Vorname", max_length=30)
+  last_name = models.CharField("Nachname", max_length=50)
+  email = models.EmailField("E-Mail")
+  phone_number = models.CharField("Telefonnummer", max_length=20, blank=True)
+  occupation = models.CharField("Beruf", max_length=40, blank=True)
+  street = models.CharField("Adresse", max_length=100)
+  zip_code = models.CharField("PLZ", max_length=10)
+  city = models.CharField("Stadt", max_length=40)
+  message = models.TextField("Persönliche Nachricht", blank=True)
 
   def __str__(self):
     return self.first_name + " " + self.last_name

@@ -1,5 +1,8 @@
 from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
+from .forms import *
+from django.urls import reverse
 
 def index(request):
   context = {}
@@ -25,3 +28,18 @@ def results(request):
   matched_services_list = Service.objects.all()[:4]
   context = {'matched_services_list':  matched_services_list}
   return render(request, 'survey/results.html', context)
+
+def profile_data(request):
+  if request.method == 'POST':
+    form = ProfileDataForm(request.POST)
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('results'))
+    else:
+      form = ProfileDataForm()
+
+  else:
+    form = ProfileDataForm()
+
+  context = {'form': ProfileDataForm}
+  return render(request, 'survey/profile_data.html', context)

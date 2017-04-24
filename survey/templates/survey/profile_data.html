@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+
+{% block body %}
+
+<div class="container">
+<div class="jumbotron">
+
+    <form action={% url 'profile_data' %} method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="row">
+            <div class="col-xs-3">
+                    {{ field.label_tag }}
+            </div>
+            <div class="col-xs-6">
+                   {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+    <input type="submit" value="Submit" class="btn btn-lg btn-success" />
+    </form>
+
+</div>
+</div>
+
+{% endblock %}
