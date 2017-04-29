@@ -4,12 +4,13 @@ from .models import *
 from .forms import *
 from django.urls import reverse
 
+
 def index(request):
   context = {}
   return render(request, 'survey/index.html', context)
 
 def interests(request):
-  context = {}
+  context = {'form': InterestsForm}
   return render(request, 'survey/interests.html', context)
 
 def skills(request):

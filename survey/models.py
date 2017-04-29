@@ -13,6 +13,20 @@ class Question(models.Model):
   def get_choices(self):
     return Choice.objects.filter(question=self)
 
+  def get_choices_as_dict(self):
+    choice_tuples = [c.choice_text.split('-') for c in self.get_choices()]
+    assert all([len(t)==2 for t in choice_tuples])
+    choice_dict = {}
+    for key, value in choice_tuples:
+      if key in choice_dict.keys():
+        choice_dict[key].append(value)
+      else:
+        choice_dict[key] = [value]
+    return choice_dict
+
+  def get_choice_options(self):
+    return list(set([c.choice_text.split('-')[1] for c in self.get_choices()]))
+
 class Choice(models.Model):
   question = models.ForeignKey(Question, on_delete=models.CASCADE)
   choice_text = models.CharField(max_length=100)

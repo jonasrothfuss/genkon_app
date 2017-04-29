@@ -3,228 +3,39 @@
 
 
 {% block body %}
-
 <div class="container">
-<div class="jumbotron">
-<h2>Für welche Themen interessierst Du dich?</h2>
-        
-              <div class="row">
-  <div class="col-xs-6">
-            </div>
-            
-  <div class="col-xs-2">
-      <h6>Interessiert</h6>
-            </div>
-      
-  <div class="col-xs-2">
-      <h6>Aufgeschlossen</h6>
-            </div>
-  <div class="col-xs-2">
-      <h6>Nicht Interessiert</h6>
-            </div>                 
-        </div>    
-                  
-                  
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Senioren</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="seniors" id="seniors1" value="1" aria-label=".test..">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="seniors" id="seniors2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="seniors" id="seniors3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Jugendliche</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="youth" id="youth1" value="1" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="youth" id="youth2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="youth" id="youth3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Kinder</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
+    <div class="jumbotron">
+        <h2>{{form.question_text}}</h2>
 
-            <input type="radio" name="children" id="children1" value="1" aria-label="...">
-            </label>
+        <!-- Header Row -->
+        <div class="row">
+            <div class="col-xs-6"></div>
+            {% for choice_option in form.choice_options %}
+            <div class="col-xs-2"><h6>{{choice_option}}</h6></div>
+            {% endfor %}
         </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="child" id="children2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="child" id="children3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Migration und Integration</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="migrants" id="migrants1" value="1" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="migrants" id="migrants2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="migrants" id="migrants3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Organisation</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="orga" id="orga1" value="1" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="orga" id="orga2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="orga" id="orga3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Medien und Technik</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="media" id="media1" value="1" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="media" id="media2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="media" id="media3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
-<div class="row">
-  <div class="col-xs-6">
-            <h5>Direkter Kontakt zu Menschen</h5>
-            </div>
-            
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="contact" id="contact1" value="1" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="contact" id="contact2" value="0" aria-label="...">
-            </label>
-        </div>
-    </div>
-    <div class="col-xs-2"> 
-        <div class="checkbox">
-            <label>
-            <input type="radio" name="contact" id="contact3" value="-1" aria-label="...">
-          </label>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <p><a class="btn btn-lg btn-success" href="{% url 'index' %}" role="button">Zurück</a>
-        <a class="btn btn-lg btn-success" href="{% url 'skills' %}" role="button">Weiter</a></p>
+
+        <form action={% url 'profile_data' %} method="post">
+            <!-- Rows with criteria and options -->
+            {% for field in form %}
+                <div class="row">
+                    <div class="col-xs-6"> <h5>{{ field.label }}</h5> </div>
+
+                    {{field}}
+                </div>
+            {% endfor %}
+
+            <!-- Row for buttons -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-lg btn-success" href="{% url 'index' %}" role="button">Zurück</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'skills' %}" role="button">Weiter</a></p>
+                </div>
+            </div>
+        </form>
     </div>
-            
-</div>
-        
-</div>
+
 </div>
 
 {% endblock %}
