@@ -1,17 +1,15 @@
 from django import forms
 from .models import Question, Profile
-from django.forms.widgets import RadioFieldRenderer
+from django.forms.widgets import RadioFieldRenderer, Select
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
-
 
 
 class ProfileDataForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ['date_posted']
-
 
 class InterestsForm(forms.Form):
     def __init__(self, *args, **kwargs):
@@ -29,6 +27,36 @@ class InterestsForm(forms.Form):
 
     def is_valid(self):
         return all([self.data[criteria] in criteria_choices for criteria, criteria_choices in self.coice_dict.items()])
+
+class SkillsForm1(forms.Form):
+    def __init__(self, *args, num_selectors=1, num_required_fields=1, **kwargs):
+        super(SkillsForm1, self).__init__(*args, **kwargs)
+
+        self.num_required_fields = num_required_fields
+        self.question = Question.objects.get(question_identifier="skills1")
+        choices = [('', '')] + [(c.choice_text, c.choice_text) for c in self.question.get_choices()]
+
+        for i in range(num_selectors):
+            required = i < num_required_fields
+            self.fields['skills1_' + str(i)] = forms.ChoiceField(widget=Select(attrs={'class': "form-control"}), choices=choices, label='', required=required)
+
+    def is_valid(self):
+        selected_skills = [self.data[field_name] for field_name in self.fields.keys() if self.data[field_name] != '']
+        valid_skill_choices = [c.choice_text for c in self.question.get_choices()]
+        valid_values = all([skill in valid_skill_choices for skill in selected_skills])
+        enough_skills_selected = len(set(selected_skills)) >= self.num_required_fields
+        return valid_values and enough_skills_selected
+
+class SkillsForm2(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(SkillsForm2, self).__init__(*args, **kwargs)
+
+        self.question = Question.objects.get(question_identifier="skills2")
+        choices = [(c.choice_text, c.choice_text) for c in self.question.get_choices()]
+        self.fields["skills2"] = forms.ChoiceField(label="", choices=choices, widget=RowChoiceWidget)
+
+    def is_valid(self):
+        return self.data["skills2"] in [c.choice_text for c in self.question.get_choices()]
 
 class RowWidgetRenderer(RadioFieldRenderer):
     outer_html = '{content}'
@@ -71,4 +99,15 @@ class RowWidgetRenderer(RadioFieldRenderer):
 
 class RowSelectWidget(forms.RadioSelect):
     renderer = RowWidgetRenderer
+
+class RowChoiceRenderer(RadioFieldRenderer):
+    def __init__(self, *args, **kwargs):
+        super(RowChoiceRenderer, self).__init__(*args, **kwargs)
+        self.outer_html = '{content}'
+        self.inner_html = '<div class="checkbox"> {choice_value}{sub_widgets}</div>'
+
+class RowChoiceWidget(forms.RadioSelect):
+    renderer = RowChoiceRenderer
+
+
 
