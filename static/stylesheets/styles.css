@@ -51,7 +51,7 @@ P {
 
 .btn-success:not(.btn-link):not(.btn-flat) {
     background-color: #0075a9;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 10px;
     text-transform: none;
 }
@@ -66,11 +66,18 @@ P {
 }
 
 .services{
-    max-width: 500px !important;
     align-content: center;
     width:100%;
+    min-height: 200px;
     padding:0px;
     margin:0px;
     text-align: center;
     background-color: white !important;
+}
+.img-wrapper {
+    display: inline-block; /* change the default display type to inline-block */
+    overflow: hidden;      /* hide the overflow */
+    width: 100%;
+    transition: all .2s ease;
+    vertical-align: bottom;
 }
