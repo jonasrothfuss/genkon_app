@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from .forms import *
 from django.urls import reverse
+from pprint import pprint
 
 
 def index(request):
@@ -10,7 +11,18 @@ def index(request):
   return render(request, 'survey/index.html', context)
 
 def interests(request):
-  context = {'form': InterestsForm}
+  if request.method == 'POST':
+    form = InterestsForm(request.POST)
+    if form.is_valid():
+      request.session['interests_post'] = request.POST
+      return HttpResponseRedirect(reverse('skills'))
+    else:
+      form = InterestsForm()
+
+  else:
+    form = InterestsForm()
+
+  context = {'form': form}
   return render(request, 'survey/interests.html', context)
 
 def skills(request):
@@ -42,5 +54,5 @@ def profile_data(request):
   else:
     form = ProfileDataForm()
 
-  context = {'form': ProfileDataForm}
+  context = {'form': form}
   return render(request, 'survey/profile_data.html', context)
