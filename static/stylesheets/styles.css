@@ -35,11 +35,6 @@ h6 {
     font-size: 13px;
 }
 
-/* New way of prioritization */
-#bootstrap-overrides h1 { /* 100+1=101 priority score, yay! */
-  line-height: 1;
-  color: darkgreen;
-}
 
 P { 
     text-align: center;
@@ -67,4 +62,14 @@ P {
 .radio-inline{
     font-family: HelveticaNeueLT, Open Sans, Arial, Helvetica, sans-serif;
     font-size: 16px;
+}
+
+.services{
+    max-width: 500px !important;
+    align-content: center;
+    width:100%;
+    padding:0px;
+    margin:0px;
+    text-align: center;
+    background-color: white !important;
 }
