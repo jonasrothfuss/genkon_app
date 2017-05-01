@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from genkon_app import settings
+import os
+from django.core.files.storage import FileSystemStorage
 
 
 class Question(models.Model):
@@ -34,6 +37,7 @@ class Choice(models.Model):
   def __str__(self):
     return self.choice_text + " (" + self.question.question_text  + ")"
 
+fs = FileSystemStorage(location="static")
 class Service(models.Model):
   service_name = models.CharField(max_length=30)
   service_link = models.CharField(max_length=300)
@@ -42,7 +46,7 @@ class Service(models.Model):
   service_description = models.CharField(max_length=300)
   service_urgency = models.IntegerField()
   service_unsalaried = models.BooleanField()
-  service_image = models.ImageField()
+  service_image = models.ImageField(upload_to= "services", storage=fs)
 
   def __str__(self):
     return self.service_name
