@@ -28,6 +28,7 @@ class Question(models.Model):
     return choice_dict
 
   def get_choice_options(self):
+
     return list(set([c.choice_text.split('-')[1] for c in self.get_choices()]))
 
 class Choice(models.Model):

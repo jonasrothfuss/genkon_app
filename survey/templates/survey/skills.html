@@ -5,46 +5,45 @@
 
 <div class="container">
 
-    <div class="jumbotron">
-        <h2>{{question1.question_text}}</h2>
-        {% for i in dropdown_iterator_skills1 %}
-        <div class="row">
-            <div class="col-xs-12">
-                <p><select class="form-control">
-                      <option> </option>
-                      {% for choice in choices1 %}
-                            <option>{{choice.choice_text}}</option>
-                      {% endfor %}
-                </select></p>
+
+     <form action={% url 'skills' %} method="post">
+         {% csrf_token %}
+
+         <!-- FORM PART 1-->
+         <div class="jumbotron">
+            <h2>{{question1.question_text}}</h2>
+            {% for field in form1 %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>{{field}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+         </div>
+
+
+        <div class="jumbotron">
+            <!-- FORM PART 2 -->
+            <h2>{{question2.question_text}}</h2>
+            <div class="row">
+                <div class="col-xs-12">
+                      {{form2}}
+                </div>
+            </div>
+            <p></p>
+
+
+            <!-- FORM SUBMIT-->
+
+             <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-lg btn-success" href="{% url 'interests' %}" role="button">Zurück</a>
+                    <input type="submit" value="Weiter" class="btn btn-lg btn-success" />
+                </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
 
-<div class="jumbotron">
-<h2>{{question2.question_text}}</h2>
-<div class="row">            
-    <div class="col-xs-12">
-        <div class="centerBlock">
-           {% for choice in choices2 %}
-            <label class="radio-inline">
-            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> {{choice.choice_text}}
-            </label>
-           {% endfor %}
-
-       </div>
-    </div>
-</div>   
-<p></p>
-    
-<div class="row">
-    <div class="col-xs-12">
-        <p><a class="btn btn-lg btn-success" href="{% url 'interests' %}" role="button">Zurück</a>
-        <a class="btn btn-lg btn-success" href="{% url 'results' %}" role="button">Auswerten</a></p>
-    </div>
-            
-</div>
-</div>        
+     </form>
 
 </div>
 

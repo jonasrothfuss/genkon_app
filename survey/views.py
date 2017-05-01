@@ -25,19 +25,31 @@ def interests(request):
   context = {'form': form}
   return render(request, 'survey/interests.html', context)
 
-def skills(request):
+def skills(request, num_selectors_skills1=3):
   question1 = Question.objects.get(question_identifier="skills1")
   question2 = Question.objects.get(question_identifier="skills2")
-  choices1 = question1.get_choices()
-  choices2 = question2.get_choices()
-  number_of_dropdown_skills1 = 3
-  assert len(choices1) > 0 and len(choices2) > 0
 
-  context = {'question1': question1, 'choices1': choices1, 'question2': question2,
-             'choices2': choices2, 'dropdown_iterator_skills1': range(number_of_dropdown_skills1)}
+  if request.method == 'POST':
+    form1 = SkillsForm1(request.POST, num_selectors=num_selectors_skills1)
+    form2 = SkillsForm2(request.POST)
+    if form1.is_valid() and form2.is_valid():
+      request.session['skills_post'] = request.POST
+      return HttpResponseRedirect(reverse('results'))
+    else:
+      form1 = SkillsForm1(num_selectors=num_selectors_skills1)
+      form2 = SkillsForm2()
+
+  else:
+    form1 = SkillsForm1(num_selectors=num_selectors_skills1)
+    form2 = SkillsForm2()
+
+  context = {'form1': form1, 'form2': form2, 'question1': question1, 'question2': question2}
   return render(request, 'survey/skills.html', context)
 
 def results(request):
+  print(request.session['interests_post'])
+  print(request.session['skills_post'])
+
   matched_services_list = Service.objects.all()[:4]
   context = {'matched_services_list':  matched_services_list}
   return render(request, 'survey/results.html', context)
