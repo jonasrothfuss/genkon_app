@@ -25,13 +25,14 @@
 <h2>{{question2.question_text}}</h2>
 <div class="row">            
     <div class="col-xs-12">
+        <div class="centerBlock">
            {% for choice in choices2 %}
             <label class="radio-inline">
             <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> {{choice.choice_text}}
             </label>
            {% endfor %}
 
-
+       </div>
     </div>
 </div>   
 <p></p>
