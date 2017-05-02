@@ -16,12 +16,16 @@ class BaseChoiceForm(forms.Form):
         raise NotImplementedError("Please Implement this method")
 
     def save(self, profile):
+        profile_choice_objects = self.create_objects(profile)
+        # save all to db
+        Profile_Choice_Selection.objects.bulk_create(profile_choice_objects)
+
+    def create_objects(self, profile):
         assert (self.is_valid())
         profile_choice_objects = []
         for choice, selected in self.pk_bool_array():
             profile_choice_objects.append(Profile_Choice_Selection(profile=profile, choice=choice, selected=selected))
-        # save all to db
-        Profile_Choice_Selection.objects.bulk_create(profile_choice_objects)
+        return profile_choice_objects
 
 class InterestsForm(BaseChoiceForm):
     def __init__(self, *args, **kwargs):
@@ -159,3 +163,11 @@ def safe_all_forms(session):
     SkillsForm2(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)
 
+def choice_array(session):
+    assert 'skills_post' in session
+    assert 'interests_post' in session
+    choice_array = []
+    choice_array.extend(SkillsForm1(session['skills_post']).pk_bool_array())
+    choice_array.extend(SkillsForm2(session['skills_post']).pk_bool_array())
+    choice_array.extend( InterestsForm(session['interests_post']).pk_bool_array())
+    return choice_array

@@ -3,8 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from .forms import *
 from django.urls import reverse
-from pprint import pprint
-
+import numpy as np
 """ VIEWS """
 
 def index(request):
@@ -53,7 +52,7 @@ def skills(request, num_selectors_skills1=3):
     return HttpResponseRedirect(reverse('interests'))
 
 def results(request):
-  matched_services_list = Service.objects.all()[:4]
+  matched_services_list = find_matched_services(request.session, num_services=4)
   context = {'matched_services_list':  matched_services_list}
   return render(request, 'survey/results.html', context)
 
@@ -107,3 +106,19 @@ def setup_skills_forms(request, num_selectors_skills1):
     form1 = SkillsForm1(num_selectors=num_selectors_skills1)
     form2 = SkillsForm2()
   return form1, form2
+
+def find_matched_services(session, num_services=4):
+  assert num_services > 0
+  choice_selection_array = choice_array(session)
+  service_score_array = score_services(choice_selection_array)
+  sorted_services = [service for service, _ in sorted(service_score_array, key=lambda x: x[1])]
+  return sorted_services[0:num_services]
+
+def score_services(choice_selection_array):
+  services = Service.objects.all()
+
+  #TODO: needs to be implemented
+
+  service_score_array = [(service, int(np.random.randint(-5,5))) for service in services]
+  assert all([isinstance(service, Service) and type(score) == int or type(score) == float for service, score in service_score_array])
+  return service_score_array
