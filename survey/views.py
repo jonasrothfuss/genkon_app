@@ -5,6 +5,7 @@ from .forms import *
 from django.urls import reverse
 from pprint import pprint
 
+""" VIEWS """
 
 def index(request):
   context = {}
@@ -20,7 +21,11 @@ def interests(request):
       form = InterestsForm()
 
   else:
-    form = InterestsForm()
+
+    if 'interests_post' in request.session.keys():
+      form = InterestsForm(request.session['interests_post'])
+    else:
+      form = InterestsForm()
 
   context = {'form': form}
   return render(request, 'survey/interests.html', context)
@@ -37,12 +42,9 @@ def skills(request, num_selectors_skills1=3):
         request.session['skills_post'] = request.POST
         return HttpResponseRedirect(reverse('results'))
       else:
-        form1 = SkillsForm1(num_selectors=num_selectors_skills1)
-        form2 = SkillsForm2()
-
+        form1, form2 = setup_skills_forms(request, num_selectors_skills1)
     else:
-      form1 = SkillsForm1(num_selectors=num_selectors_skills1)
-      form2 = SkillsForm2()
+      form1, form2 = setup_skills_forms(request, num_selectors_skills1)
 
     context = {'form1': form1, 'form2': form2, 'question1': question1, 'question2': question2}
     return render(request, 'survey/skills.html', context)
@@ -63,17 +65,45 @@ def profile_data(request):
     return HttpResponseRedirect(reverse('skills'))
 
   else: #interests and skills are provided --> proceed with profile data
-    print(request.session['interests_post'], request.session['skills_post'])
+
+    if 'profile_post' in request.session:
+      restored_form_data = request.session['profile_post']
+    else:
+      restored_form_data = {}
+
     if request.method == 'POST':
       form = ProfileDataForm(request.POST)
       if form.is_valid():
-        form.save()
+        request.session['profile_post'] = request.POST
+
+        safe_all_forms(request.session)
+        clear_session(request)
+
         return HttpResponseRedirect(reverse('results'))
       else:
-        form = ProfileDataForm()
+        form = ProfileDataForm(restored_form_data)
 
     else:
-      form = ProfileDataForm()
+      form = ProfileDataForm(restored_form_data)
 
     context = {'form': form}
     return render(request, 'survey/profile_data.html', context)
+
+
+""" HELPER METHODS"""
+
+#not a view
+def clear_session(request):
+  for sesskey in list(request.session.keys()):
+    del request.session[sesskey]
+
+#not a view
+def setup_skills_forms(request, num_selectors_skills1):
+  if 'skills_post' in request.session:
+    restored_form_data = request.session['skills_post']
+    form1 = SkillsForm1(restored_form_data, num_selectors=num_selectors_skills1)
+    form2 = SkillsForm2(restored_form_data)
+  else:
+    form1 = SkillsForm1(num_selectors=num_selectors_skills1)
+    form2 = SkillsForm2()
+  return form1, form2

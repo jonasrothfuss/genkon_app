@@ -4,6 +4,7 @@ from genkon_app import settings
 import os
 from django.core.files.storage import FileSystemStorage
 
+fs = FileSystemStorage(location="static")
 
 class Question(models.Model):
   question_identifier = models.CharField(max_length=10)
@@ -18,13 +19,14 @@ class Question(models.Model):
 
   def get_choices_as_dict(self):
     choice_tuples = [c.choice_text.split('-') for c in self.get_choices()]
+    choice_pks = [c.pk for c in self.get_choices()]
     assert all([len(t)==2 for t in choice_tuples])
     choice_dict = {}
-    for key, value in choice_tuples:
+    for (key, value), pk in zip (choice_tuples, choice_pks):
       if key in choice_dict.keys():
-        choice_dict[key].append(value)
+        choice_dict[key].append((pk, value))
       else:
-        choice_dict[key] = [value]
+        choice_dict[key] = [(pk, value)]
     return choice_dict
 
   def get_choice_options(self):
@@ -38,7 +40,6 @@ class Choice(models.Model):
   def __str__(self):
     return self.choice_text + " (" + self.question.question_text  + ")"
 
-fs = FileSystemStorage(location="static")
 class Service(models.Model):
   service_name = models.CharField(max_length=30)
   service_link = models.CharField(max_length=300)

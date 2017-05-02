@@ -1,62 +1,103 @@
 from django import forms
-from .models import Question, Profile
+from .models import Question, Profile, Profile_Choice_Selection
 from django.forms.widgets import RadioFieldRenderer, Select
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
-
+import numpy as np
 
 class ProfileDataForm(forms.ModelForm):
     class Meta:
         model = Profile
         exclude = ['date_posted']
 
-class InterestsForm(forms.Form):
+class BaseChoiceForm(forms.Form):
+    def pk_bool_array(self):
+        raise NotImplementedError("Please Implement this method")
+
+    def save(self, profile):
+        assert (self.is_valid())
+        profile_choice_objects = []
+        for choice, selected in self.pk_bool_array():
+            profile_choice_objects.append(Profile_Choice_Selection(profile=profile, choice=choice, selected=selected))
+        # save all to db
+        Profile_Choice_Selection.objects.bulk_create(profile_choice_objects)
+
+class InterestsForm(BaseChoiceForm):
     def __init__(self, *args, **kwargs):
         super(InterestsForm, self).__init__(*args, **kwargs)
-        question = Question.objects.get(question_identifier="interests")
-        self.coice_dict = question.get_choices_as_dict()
+        self.question = Question.objects.get(question_identifier="interests")
+        self.choice_dict = self.question.get_choices_as_dict()
 
-        self.question_text = question.question_text
+        self.criteria_pk_dict = {}
+        for criteria, criteria_choices in self.choice_dict.items():
+            self.criteria_pk_dict[criteria] = [pk for pk, c in criteria_choices]
+
+        self.question_text = self.question.question_text
         self.choice_options = ["Interessiert", "Aufgeschlossen", "Nicht Interessiert"]
-        assert set(self.choice_options) == set(question.get_choice_options())
+        assert set(self.choice_options) == set(self.question.get_choice_options())
 
-        for criteria, criteria_choices in self.coice_dict.items():
-            choices = [(c,c) for c in criteria_choices]
+        for criteria, criteria_choices in self.choice_dict.items():
+            choices = [(pk, c) for pk, c in criteria_choices]
             self.fields[criteria] = forms.ChoiceField(label=criteria, widget=RowSelectWidget, choices=choices)
 
     def is_valid(self):
-        return all([self.data[criteria] in criteria_choices for criteria, criteria_choices in self.coice_dict.items()])
+        return all([int(self.data[criteria]) in pks for criteria, pks in self.criteria_pk_dict.items()])
 
-class SkillsForm1(forms.Form):
+    def pk_bool_array(self):
+        assert (self.is_valid())
+        selected_pks = [int(self.data[criteria]) for criteria in self.choice_dict]
+        pk_bool_array = [(c, c.pk in selected_pks) for c in self.question.get_choices()]
+        assert np.sum([int(selected) for _, selected in pk_bool_array]) == len(self.choice_dict)
+        assert len(pk_bool_array) == len(self.question.get_choices())
+        return pk_bool_array
+
+class SkillsForm1(BaseChoiceForm):
     def __init__(self, *args, num_selectors=1, num_required_fields=1, **kwargs):
         super(SkillsForm1, self).__init__(*args, **kwargs)
 
         self.num_required_fields = num_required_fields
+        self.num_selectors = num_selectors
         self.question = Question.objects.get(question_identifier="skills1")
-        choices = [('', '')] + [(c.choice_text, c.choice_text) for c in self.question.get_choices()]
+        choices = [('', '')] + [(c.pk, c.choice_text) for c in self.question.get_choices()]
 
-        for i in range(num_selectors):
+        for i in range(self.num_selectors):
             required = i < num_required_fields
             self.fields['skills1_' + str(i)] = forms.ChoiceField(widget=Select(attrs={'class': "form-control"}), choices=choices, label='', required=required)
 
     def is_valid(self):
-        selected_skills = [self.data[field_name] for field_name in self.fields.keys() if self.data[field_name] != '']
-        valid_skill_choices = [c.choice_text for c in self.question.get_choices()]
-        valid_values = all([skill in valid_skill_choices for skill in selected_skills])
-        enough_skills_selected = len(set(selected_skills)) >= self.num_required_fields
-        return valid_values and enough_skills_selected
+        try:
+            selected_skills = [int(self.data[field_name]) for field_name in self.fields.keys() if self.data[field_name] != '']
+            valid_skill_choices = [c.pk for c in self.question.get_choices()]
+            valid_values = all([skill in valid_skill_choices for skill in selected_skills])
+            enough_skills_selected = len(set(selected_skills)) >= self.num_required_fields
+            return valid_values and enough_skills_selected
+        except:
+            return False
 
-class SkillsForm2(forms.Form):
+    def pk_bool_array(self):
+        assert (self.is_valid())
+        selected_pks = [int(self.data['skills1_' + str(i)]) for i in range(self.num_selectors) if not self.data['skills1_' + str(i)] == ""]
+        return [(c, c.pk in selected_pks) for c in self.question.get_choices()]
+
+class SkillsForm2(BaseChoiceForm):
     def __init__(self, *args, **kwargs):
         super(SkillsForm2, self).__init__(*args, **kwargs)
 
         self.question = Question.objects.get(question_identifier="skills2")
-        choices = [(c.choice_text, c.choice_text) for c in self.question.get_choices()]
+        choices = [(c.pk, c.choice_text) for c in self.question.get_choices()]
         self.fields["skills2"] = forms.ChoiceField(label="", choices=choices, widget=RowChoiceWidget)
 
     def is_valid(self):
-        return self.data["skills2"] in [c.choice_text for c in self.question.get_choices()]
+        try:
+            return int(self.data["skills2"]) in [c.pk for c in self.question.get_choices()]
+        except:
+            return False
+
+    def pk_bool_array(self):
+        assert (self.is_valid())
+        selected_pk = int(self.data["skills2"])
+        return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
 
 class RowWidgetRenderer(RadioFieldRenderer):
     outer_html = '{content}'
@@ -109,5 +150,12 @@ class RowChoiceRenderer(RadioFieldRenderer):
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
 
-
+def safe_all_forms(session):
+    assert 'profile_post' in session
+    assert 'skills_post' in session
+    assert 'interests_post' in session
+    profile = ProfileDataForm(session['profile_post']).save()
+    SkillsForm1(session['skills_post']).save(profile)
+    SkillsForm2(session['skills_post']).save(profile)
+    InterestsForm(session['interests_post']).save(profile)
 
