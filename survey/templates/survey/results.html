@@ -8,21 +8,28 @@
 
   
 {% if matched_services_list %}
-    {% for service in matched_services_list %}
     
+<div class="row">
+    
+    {% for service in matched_services_list %}
+<div class="col-md-4">
 <div class="jumbotron services">
     <h2>{{service.service_title}}</h2>
+    <div class="img-wrapper">
     <img src="/static/{{service.service_image}}" alt="My image" style=" width:100%"/>
+    </div>
     <h5>{{service.service_subtitle}}</h5>
     <div class="row">
     <div class="col-xs-12">
         <p><a class="btn btn-lg btn-success"  role="button">Mehr lesen</a>
         <a class="btn btn-lg btn-success"  role="button">Anfragen</a></p>
+    </div>         
     </div>
-            
 </div>
-</div>    
+</div>
+    
     {% endfor %}
+</div>
     
 {% else %}
 <div class="jumbotron">
