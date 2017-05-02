@@ -52,9 +52,14 @@ def skills(request, num_selectors_skills1=3):
     return HttpResponseRedirect(reverse('interests'))
 
 def results(request):
-  matched_services_list = find_matched_services(request.session, num_services=4)
-  context = {'matched_services_list':  matched_services_list}
-  return render(request, 'survey/results.html', context)
+  if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
+    return HttpResponseRedirect(reverse('interests'))
+  elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
+    return HttpResponseRedirect(reverse('skills'))
+  else:
+    matched_services_list = find_matched_services(request.session, num_services=4)
+    context = {'matched_services_list':  matched_services_list}
+    return render(request, 'survey/results.html', context)
 
 def profile_data(request):
   """ Check if skill and interest form data is stored in session """
