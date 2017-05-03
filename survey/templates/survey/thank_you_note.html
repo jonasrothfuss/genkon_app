@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+<div class="container">
+
+
+   <div class="jumbotron">
+       <h2> {{thank_you_text}} </h2>
+       <p></p>
+       <p class="lead">{{further_note}}</p>
+   </div>
+
+</div>
+
+  <script>
+        var timer = setTimeout(function() {
+            window.location='{% url 'index' %}'
+        }, {{time_delay}});
+   </script>
+
+{% endblock %}

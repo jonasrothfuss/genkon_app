@@ -90,7 +90,7 @@ def profile_data(request):
         safe_all_forms(request.session)
         clear_session(request)
 
-        return HttpResponseRedirect(reverse('results'))
+        return HttpResponseRedirect(reverse('thank_you_note'))
       else:
         form = ProfileDataForm(restored_form_data)
 
@@ -100,6 +100,13 @@ def profile_data(request):
     context = {'form': form}
     return render(request, 'survey/profile_data.html', context)
 
+def thank_you_note(request):
+  context = {
+    'thank_you_text': 'Vielen Dank für dein Interesse!',
+    'further_note': 'Wir werden uns demnächst mit dir in Kontakt setzen.',
+    'time_delay': 7 * 1000 # time delay in ms until redirect
+  }
+  return render(request, 'survey/thank_you_note.html', context)
 
 """ HELPER METHODS"""
 
