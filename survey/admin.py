@@ -18,10 +18,10 @@ class ProfileChoiceAdmin(admin.TabularInline):
 
 class ProfileAdmin(admin.ModelAdmin):
   fieldsets = [
-    (None, {'fields': ['date_posted','first_name','last_name']}),
+    (None, {'fields': ['date_posted','first_name','last_name', 'selected_service']}),
     ('Contact Details', {'fields': ['email', 'phone_number']}),
     ('Address', {'fields': ['street', 'zip_code', 'city']}),
-    ('Additional Information', {'fields': ['occupation','message']}),
+    ('Zusätzliche Information', {'fields': ['occupation','message']}),
   ]
   inlines = [ProfileChoiceAdmin]
 

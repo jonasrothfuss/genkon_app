@@ -4,6 +4,9 @@ from .models import *
 from .forms import *
 from django.urls import reverse
 import numpy as np
+from pprint import pprint
+
+
 """ VIEWS """
 
 def index(request):
@@ -58,7 +61,7 @@ def results(request):
     return HttpResponseRedirect(reverse('skills'))
   else:
     if request.method == 'POST':
-      request.session['results_post'] = int(request.POST['service'])
+      request.session['results_post'] = request.POST
       return HttpResponseRedirect(reverse('profile_data'))
     else:
       matched_services_list = find_matched_services(request.session, num_services=4)
@@ -116,6 +119,7 @@ def setup_skills_forms(request, num_selectors_skills1):
     form2 = SkillsForm2()
   return form1, form2
 
+#not a view
 def find_matched_services(session, num_services=4):
   assert num_services > 0
   choice_selection_array = choice_array(session)
@@ -123,11 +127,18 @@ def find_matched_services(session, num_services=4):
   sorted_services = [service for service, _ in sorted(service_score_array, key=lambda x: x[1])]
   return sorted_services[0:num_services]
 
+#not a view
 def score_services(choice_selection_array):
   services = Service.objects.all()
 
-  #TODO: needs to be implemented
+  service_score_array = []
+  for service in services:
+    service_score = 0
+    for choice, selected in choice_selection_array:
+      if selected:
+        service_score += Service_Choice_Score.objects.get(service=service, choice=choice).score
+    service_score += service.service_urgency
+    service_score_array.append((service, service_score))
 
-  service_score_array = [(service, int(np.random.randint(-5,5))) for service in services]
   assert all([isinstance(service, Service) and type(score) == int or type(score) == float for service, score in service_score_array])
   return service_score_array

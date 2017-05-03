@@ -1,5 +1,5 @@
 from django import forms
-from .models import Question, Profile, Profile_Choice_Selection
+from .models import Question, Profile, Profile_Choice_Selection, Service
 from django.forms.widgets import RadioFieldRenderer, Select
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -9,7 +9,7 @@ import numpy as np
 class ProfileDataForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ['date_posted']
+        exclude = ['date_posted', 'selected_service']
 
 class BaseChoiceForm(forms.Form):
     def pk_bool_array(self):
@@ -158,7 +158,10 @@ def safe_all_forms(session):
     assert 'profile_post' in session
     assert 'skills_post' in session
     assert 'interests_post' in session
+    assert 'results_post' in session
     profile = ProfileDataForm(session['profile_post']).save()
+    profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
+    profile.save()
     SkillsForm1(session['skills_post']).save(profile)
     SkillsForm2(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)

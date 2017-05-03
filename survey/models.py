@@ -64,6 +64,7 @@ class Profile(models.Model):
   zip_code = models.CharField("PLZ", max_length=10)
   city = models.CharField("Stadt", max_length=40)
   message = models.TextField("Persönliche Nachricht", blank=True)
+  selected_service = models.ForeignKey(Service, verbose_name="Gewählter Service", on_delete=models.SET_NULL, blank=True, null=True)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
