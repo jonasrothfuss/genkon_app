@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from genkon_app import settings
 import os
+import numpy as np
 from django.core.files.storage import FileSystemStorage
 
 fs = FileSystemStorage(location="static")
@@ -78,3 +79,10 @@ class Profile_Choice_Selection(models.Model):
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
   choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
   selected = models.BooleanField()
+
+def generate_service_choice_scores_randomly():
+  services = Service.objects.all()
+  choices = Choice.objects.all()
+  for s in services:
+    for c in choices:
+      Service_Choice_Score(service=s, choice=c, score=np.random.randint(-3,3)).save()
