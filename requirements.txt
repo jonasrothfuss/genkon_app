@@ -4,3 +4,4 @@ dj-static
 django-appconf
 django-compressor
 Pillow
+numpy
