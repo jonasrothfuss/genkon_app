@@ -1,0 +1,22 @@
+{
+  "name": "genkon_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "chmod +x ./scripts/postInstall.sh && ./scripts/postInstall.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonasrothfuss/genkon_app.git"
+  },
+  "author": "Jonas Rothfuss, Julian Marstaller",
+  "bugs": {
+    "url": "https://github.com/jonasrothfuss/genkon_app/issues"
+  },
+  "homepage": "https://github.com/jonasrothfuss/genkon_app",
+  "dependencies": {
+    "bower": "^1.3.12"
+  }
+}

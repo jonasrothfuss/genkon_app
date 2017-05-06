@@ -1,6 +1,9 @@
 # Temporary files
 .~
 
+#Service Images
+static/services/
+
 # Python compiled byte code
 *.pyc
 

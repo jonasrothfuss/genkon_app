@@ -1,0 +1,1 @@
+web: gunicorn genkon_app.wsgi --log-file -
