@@ -131,7 +131,7 @@ def find_matched_services(session, num_services=4):
   assert num_services > 0
   choice_selection_array = choice_array(session)
   service_score_array = score_services(choice_selection_array)
-  sorted_services = [service for service, _ in sorted(service_score_array, key=lambda x: x[1])]
+  sorted_services = [service for service, _ in sorted(service_score_array, key=lambda x: x[1], reverse=True)]
   return sorted_services[0:num_services]
 
 #not a view
