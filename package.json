@@ -2,10 +2,13 @@
   "name": "genkon_app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "chmod +x ./scripts/postInstall.sh && ./scripts/postInstall.sh"
+  },
+  "engines": {
+    "node": "7.9.0"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,6 @@
   },
   "homepage": "https://github.com/jonasrothfuss/genkon_app",
   "dependencies": {
-    "bower": "^1.3.12"
+    "bower": "1.8.0"
   }
 }
