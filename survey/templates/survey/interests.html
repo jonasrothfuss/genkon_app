@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-xs-6"></div>
             {% for choice_option in form.choice_options %}
-            <div class="col-xs-2"><h6>{{choice_option}}</h6></div>
+            <div class="col-xs-2" style="text-align: center"><h6>{{choice_option}}</h6></div>
             {% endfor %}
         </div>
 
@@ -21,8 +21,9 @@
             <!-- Rows with criteria and options -->
             {% for field in form %}
                 <div class="row">
-                    <div class="col-xs-6"> <h5>{{ field.label }}</h5> </div>
-
+                    <div class="col-xs-6">
+                    <h5>{{ field.label }}</h5>
+                    </div>
                     {{field}}
                 </div>
             {% endfor %}

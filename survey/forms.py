@@ -105,7 +105,7 @@ class SkillsForm2(BaseChoiceForm):
 
 class RowWidgetRenderer(RadioFieldRenderer):
     outer_html = '{content}'
-    inner_html = '<div class="col-xs-2"> <div class="checkbox"> {choice_value}{sub_widgets}</div> </div>'
+    inner_html = '<div class="col-xs-2" style="text-align: center"> <div class="checkbox"> {choice_value}{sub_widgets}</div> </div>'
 
     def render(self):
         """
