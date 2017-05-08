@@ -1,13 +1,16 @@
 
 html {
-	webkit-font-smoothing: antialiased;
+	-webkit-font-smoothing: antialiased;
+    height: 100%;
 }
+
+
 
 body {
   background-color: #F2F2F2; /* Hintergrundfarbe */
   color: #554f4a; /* Schriftfarbe */
   font-family: HelveticaNeueLT, Open Sans, Arial, Helvetica, sans-serif;
-
+  height: 100%;
 }
 
 .jumbotron h1 { 
@@ -30,6 +33,11 @@ margin-bottom: 10px;
   font-size: 2rem
 }
 
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 
 h6 { 
@@ -43,8 +51,10 @@ P {
 }
 
 .jumbotron {
-    
+
+    max-width: 800px;
     min-height: 10em;
+    min-width: 280px;
     vertical-align: middle;
 }
 
@@ -68,7 +78,7 @@ P {
 .services{
     align-content: center;
     width:100%;
-    min-height: 200px;
+    max-width: 100vm;
     padding:0px;
     margin:0px;
     text-align: center;
@@ -80,4 +90,71 @@ P {
     width: 100%;
     transition: all .2s ease;
     vertical-align: bottom;
+}
+
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
+}
+
+.footer, .push {
+    height: 100px; /* .push must be the same height as .footer */
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.img_thumb {
+    float: left;
+    position: relative;
+    text-align:center;
+}
+
+.img_thumb img {
+    vertical-align: middle;
+}
+
+
+/* Flipping Cards */
+#f1_container {
+  position: relative;
+  margin: 10px auto;
+  width: 450px;
+  height: 281px;
+  z-index: 1;
+}
+#f1_container {
+  perspective: 1000;
+}
+#f1_card {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: all 1.0s linear;
+}
+#f1_container:hover #f1_card {
+  transform: rotateY(180deg);
+  box-shadow: -5px 5px 5px #eee;
+}
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.face.back {
+  display: block;
+  transform: rotateY(180deg);
+  box-sizing: border-box;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #0075a9;
 }
