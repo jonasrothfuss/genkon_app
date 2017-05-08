@@ -43,24 +43,26 @@
 
 </div>
 </div>   
-<div class="container">   
-
+<div class="container">  
+<div class="row">
+<div class="col-md-6 col-xs-12 col-lg-6">
 <div class="jumbotron services" style="min-height: 0%">
             <!-- FORM SUBMIT-->
 
              <div class="row">
                 <div class="col-xs-12">
-                    <a class="btn btn-lg btn-success" href="{% url 'skills' %}" role="button">Angaben korrigieren</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'skills' %}" role="button">Zurück</a>
                     <a class="btn btn-lg btn-success" href="{% url 'results' %}" role="button">Mehr anzeigen</a>
                     <a class="btn btn-lg btn-success" href="{% url 'profile_data' %}" role="button">Nichts gefunden</a>
                 </div>
             </div>
 </div>
 </div>
-
+</div>
+</div>
 {% else %}
 <div class="container">  
-<div class="jumbotron">
+<div class="jumbotron services">
     <p>Leider konnten keine Ergebnisse für Deine Antworten gefunden werden.</p>
     <div class="row">
     <div class="col-xs-12">
