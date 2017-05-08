@@ -13,8 +13,36 @@
 </head>
 <body>
     <p></p>
+    <div class="wrapper">
      {% block body %}
         <h3> This is the base page</h3>
      {% endblock %}
+    <div class="push"></div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+    <div class="row">
+      <div class="col-xs-1 col-md-1 col-lg-1 vcenter"></div>
+      <div class="col-xs-3 col-md-3 col-lg-3 vcenter">
+         <p class="text-muted">Powered by</p>
+      </div>
+      <div class="col-xs-4 col-md-4 col-lg-4 vcenter">
+        <div class="img_thumb">
+            <a class="images_class" href="large.jpg" rel="images">
+            <img src="/static/images/DRK_Logo2.svg"    alt="My image" style="max-width: 80%; max-height: 100%;"/>
+            </a>
+        </div>
+     </div><!--
+    --><div class="col-xs-3 col-md-3 col-lg-3 vcenter">
+        <div class="img_thumb">
+            <a class="images_class" href="large.jpg" rel="images">
+            <img src="/static/images/Generationenkontakt.png"    alt="My image" style="max-width: 80%; max-height: 100%;"/>
+            </a>
+        </div>
+     </div> 
+     </div>
+ </div>
+   
+    </footer>
 </body>
 </html>
