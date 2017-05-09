@@ -6,6 +6,7 @@ from .models import *
 from .forms import *
 from django.urls import reverse
 import numpy as np
+import math
 from pprint import pprint
 
 
@@ -57,6 +58,8 @@ def skills(request, num_selectors_skills1=3):
     return HttpResponseRedirect(reverse('interests'))
 
 def results(request):
+  num_services_in_db = len(Service.objects.all())
+
   if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
     return HttpResponseRedirect(reverse('interests'))
   elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
@@ -66,8 +69,14 @@ def results(request):
       request.session['results_post'] = request.POST
       return HttpResponseRedirect(reverse('profile_data'))
     else:
-      matched_services_list = find_matched_services(request.session, num_services=4)
-      context = {'matched_services_list': matched_services_list}
+      if 'num_services' in request.GET:
+        num_services = min(int(request.GET['num_services']), num_services_in_db)
+      else:
+        num_services = 4
+
+      num_services_extend = num_services + 4
+      matched_services_list = find_matched_services(request.session, num_services=num_services)
+      context = {'matched_services_list': matched_services_list, 'num_services': num_services_extend}
       return render(request, 'survey/results.html', context)
 
 def profile_data(request):
