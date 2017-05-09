@@ -7,9 +7,15 @@ from django.utils.encoding import force_text
 import numpy as np
 
 class ProfileDataForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileDataForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+                
     class Meta:
         model = Profile
         exclude = ['date_posted', 'selected_service']
+        
 
 class BaseChoiceForm(forms.Form):
     def pk_bool_array(self):
