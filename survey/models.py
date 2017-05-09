@@ -115,6 +115,14 @@ class Profile(models.Model):
   def __str__(self):
     return self.first_name + " " + self.last_name
 
+  @staticmethod
+  def get_df():
+    profiles = Profile.objects.all()
+    df = pd.DataFrame.from_records(profiles.values())
+
+    return df
+
+
 class Service_Choice_Score(models.Model):
   service = models.ForeignKey(Service, on_delete=models.CASCADE)
   choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
