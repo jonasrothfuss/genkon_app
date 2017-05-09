@@ -8,10 +8,10 @@
         <h2>{{form.question_text}}</h2>
 
         <!-- Header Row -->
-        <div class="row">
+        <div class="row" style="margin-top:70px">
             <div class="col-xs-6"></div>
             {% for choice_option in form.choice_options %}
-            <div class="col-xs-2" style="text-align: center"><h6>{{choice_option}}</h6></div>
+            <div class="col-xs-2" style="text-align: center; transform: rotate(-90deg)"><h6>{{choice_option}}</h6></div>
             {% endfor %}
         </div>
 
