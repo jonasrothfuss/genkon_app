@@ -133,7 +133,5 @@ STATICFILES_FINDERS = (
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-
-
-
-
+# Auth setting
+LOGIN_REDIRECT_URL = '/'
