@@ -37,6 +37,8 @@ margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -50,12 +52,21 @@ P {
     font-weight: lighter;
 }
 
+a { 
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .jumbotron {
 
     max-width: 800px;
     min-height: 10em;
     min-width: 280px;
     vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -92,15 +103,16 @@ P {
     vertical-align: bottom;
 }
 
-.wrapper {
+/*.wrapper {
     min-height: 100%;
     height: auto !important;
     height: 100%;
-    margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
+    margin: 0 auto -200px; /* the bottom margin is the negative value of the footer's height */
 }
 
-.footer, .push {
-    height: 100px; /* .push must be the same height as .footer */
+/*.footer, .push {
+    height: 200px;
+   /* .push must be the same height as .footer */
 }
 
 .vcenter {

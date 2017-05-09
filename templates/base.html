@@ -13,32 +13,27 @@
 </head>
 <body>
     <p></p>
-    <div class="wrapper">
+
      {% block body %}
         <h3> This is the base page</h3>
      {% endblock %}
     <div class="push"></div>
-    </div>
+
     <footer class="footer">
-    <div class="container">
+    <div class="container" >
     <div class="row">
-      <div class="col-xs-1 col-md-1 col-lg-1 vcenter"></div>
-      <div class="col-xs-3 col-md-3 col-lg-3 vcenter">
-         <p class="text-muted">Powered by</p>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
+         <p class="text-muted" style="margin: 10px">Powered by</p>
       </div>
-      <div class="col-xs-4 col-md-4 col-lg-4 vcenter">
-        <div class="img_thumb">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
             <a class="images_class" rel="images">
-            <img src="/static/images/DRK_Logo2.svg"    alt="My image" style="max-width: 200px; max-height: 100%;"/>
+            <img src="/static/images/DRK_Logo2.svg"    alt="My image" style="max-width: 200px; max-height: 100%; margin: 10px"/>
             </a>
-        </div>
-     </div><!--
-    --><div class="col-xs-3 col-md-3 col-lg-3 vcenter">
-        <div class="img_thumb">
-            <a class="images_class" style="margin: 40px" rel="images">
-            <img src="/static/images/Generationenkontakt.png"    alt="My image" style="max-width: 100px; max-height: 100%;"/>
+     </div>
+     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
+            <a class="images_class" style="margin: 10px" rel="images">
+            <img src="/static/images/Generationenkontakt.png"    alt="My image" style="max-width: 90px; max-height: 100%;"/>
             </a>
-        </div>
      </div> 
      </div>
  </div>
