@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 from .models import *
 from .forms import *
 from django.urls import reverse
@@ -107,6 +109,9 @@ def thank_you_note(request):
     'time_delay': 7 * 1000 # time delay in ms until redirect
   }
   return render(request, 'survey/thank_you_note.html', context)
+
+class ListProfilesView(LoginRequiredMixin, ListView):
+    model = Profile
 
 """ HELPER METHODS"""
 
