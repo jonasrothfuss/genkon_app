@@ -8,16 +8,16 @@
 
   
 {% if matched_services_list %}
-<div class="container">   
-<div class="row">
+<div class="container" style="padding: 15px">   
+<div class="row" style="width: 100%;">
 
     {% for service in matched_services_list %}
     <form action={% url 'results' %} method="post">
     {% csrf_token %}
-    <div class="col-md-6 col-xs-12 col-lg-6">
+    <div class="col-md-6 col-xs-12 col-lg-6" style="padding:10px;">
         <div class="jumbotron services">
             <h2>{{service.service_title}}</h2>
-            <div class="img-wrapper">
+            <div class="img-wrapper" style="width: 100%;">
             <div id="f1_container">
                 <div id="f1_card" class="shadow">
                     <div class="front face">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             </div>
-            <h5>{{service.service_subtitle}}</h5>
+            <h5 style="overflow: scroll; height: 30px;">{{service.service_subtitle}}</h5>
             <div class="row">
             <div class="col-xs-12">
                 <input type='hidden' name='service' value='{{service.pk}}'/>
@@ -42,11 +42,11 @@
     {% endfor %}
 
 </div>
-</div>   
+</div>  
 <div class="container">  
-<div class="row">
-<div class="col-md-12 col-xs-12 col-lg-12">
-<div class="jumbotron services" style="min-height: 0%">
+<div class="row" style="width: 100%">
+<div class="col-md-12 col-xs-12 col-lg-12" style="padding: 0px; display: flex; align-items: center; justify-content: center;">
+<div class="jumbotron" style="min-height:0%; width: 100%; margin: 10px; text-align: center; max-width:10000px;">
             <!-- FORM SUBMIT-->
 
              <div class="row">
@@ -72,7 +72,7 @@
             
 </div>
 </div>  
-</div>    
+</div>
 {% endif %}
 
 
