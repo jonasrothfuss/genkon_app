@@ -164,10 +164,10 @@ def safe_all_forms(session):
     assert 'profile_post' in session
     assert 'skills_post' in session
     assert 'interests_post' in session
-    assert 'results_post' in session
     profile = ProfileDataForm(session['profile_post']).save()
-    profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
-    profile.save()
+    if 'results_post' in session:
+        profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
+        profile.save()
     SkillsForm1(session['skills_post']).save(profile)
     SkillsForm2(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)
