@@ -66,11 +66,11 @@ class Choice(models.Model):
     Choice.objects.bulk_create(choice_objects)
 
 class Service(models.Model):
-  service_name = models.CharField(max_length=30)
-  service_link = models.CharField(max_length=300)
-  service_title = models.CharField(max_length=30)
-  service_subtitle = models.CharField(max_length=100)
-  service_description = models.CharField(max_length=300)
+  service_name = models.CharField(max_length=80)
+  service_link = models.CharField(max_length=400)
+  service_title = models.CharField(max_length=80)
+  service_subtitle = models.CharField(max_length=200)
+  service_description = models.CharField(max_length=1000)
   service_urgency = models.IntegerField()
   service_unsalaried = models.BooleanField()
   service_image = models.ImageField(upload_to="services", storage=fs)
