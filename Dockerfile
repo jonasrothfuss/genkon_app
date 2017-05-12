@@ -5,7 +5,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM ubuntu:14.04
+FROM tailordev/pandas
 
 MAINTAINER Jonas Rothfuss
 
@@ -20,8 +20,7 @@ ENV DOCKYARD_SRVPROJ=/srv/genkon_app
 
 # Update the default application repository sources list
 RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y python3 python3-pip
-RUN sudo apt-get install -y libtiff5-dev libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev
+RUN apt-get install -y libtiff5-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev
 
 # Create application subdirectories
 WORKDIR $DOCKYARD_SRVHOME

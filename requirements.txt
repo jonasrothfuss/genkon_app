@@ -4,10 +4,10 @@ Django==1.10.6
 django-appconf==1.0.2
 djangorestframework==3.6.2
 gunicorn==19.7.1
-numpy==1.12.1
+numpy
 olefile==0.44
 packaging==16.8
-pandas==0.20.1
+pandas
 Pillow==4.1.1
 pyparsing==2.2.0
 python-dateutil==2.6.0
