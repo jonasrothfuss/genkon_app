@@ -3,10 +3,27 @@
 
 {% block body %}
 
-    <h2>Profiles</h2>
-    <ul>
-        {% for profile in object_list %}
-            <li>{{ profile.first_name }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+
+      <div class="jumbotron">
+        <h2>Profiles</h2>
+         <ul>
+            {% for profile in object_list %}
+                <li>{{ profile.first_name }} {{ profile.last_name }}</li>
+            {% endfor %}
+        </ul>
+
+          <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-lg btn-success" href="{% url 'profile_csv' %}" role="button">Download CSV</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'logout' %}" role="button">Logout</a>
+                </div>
+          </div>
+
+
+
+
+      </div>
+    </div>
+
 {% endblock %}
