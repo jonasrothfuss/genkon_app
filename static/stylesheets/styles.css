@@ -142,7 +142,14 @@ a {
   height: 281px;
   z-index: 1;
   overflow: scroll;
+overflow-x: hidden;
 }
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
 #f1_container {
   perspective: 1000;
 }
