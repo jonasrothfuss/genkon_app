@@ -59,8 +59,8 @@ class Choice(models.Model):
     assert set(df.columns) >= set(['pk', 'question_fk', 'choice_text'])
     df = df.replace(np.nan, '', regex=True)
     choice_objects = [Choice(
-      pk=record['pk'],
-      question=Question.objects.get(pk=record['question_fk']),
+      pk=int(record['pk']),
+      question=Question.objects.get(pk=int(record['question_fk'])),
       choice_text=record['choice_text']
     ) for _, record in df.iterrows()]
     Choice.objects.bulk_create(choice_objects)
@@ -151,22 +151,31 @@ def generate_service_choice_scores_randomly():
     for c in choices:
       Service_Choice_Score(service=s, choice=c, score=np.random.randint(-3,3)).save()
 
-def make_model_df_dict(csv_dir, models = ['Question', 'Choice', 'Service', 'Score']):
-  csv_files = glob.glob(os.path.join(csv_dir, '*.csv'))
-  model_df_dict = {}
-  for model in models:
-    csv_file = glob.glob(os.path.join(csv_dir, '*' + model + '*.csv'))[0]
-    if model=='Service':
-      model_df_dict[model] = pd.read_csv(csv_file, sep = '\t', lineterminator = '\n')
-    else:
-      model_df_dict[model] = pd.read_csv(csv_file)
-  return model_df_dict
+def df_from_csv(csv_dir, model, expected_cols = []):
+  csv_file = glob.glob(os.path.join(csv_dir, '*' + str(model) + '*.csv'))[0]
+  for sep in [',', ';', '\t']:
+    try:
+      df = pd.read_csv(csv_file, sep = sep)
+      assert set(df.columns) >= set(expected_cols)
+      return df
+    except Exception as e:
+      if sep =='\t':
+        raise AssertionError("Could not parse CSV properly - expected the following columns:" + str(expected_cols))
+
 
 def load_data_from_csv(csv_dir):
   image_dir = os.path.join(csv_dir, 'images')
-  model_df_dict = make_model_df_dict(csv_dir)
-  Question.save_df_data(model_df_dict['Question'])
-  Choice.save_df_data(model_df_dict['Choice'])
-  Service.save_df_data(model_df_dict['Service'], image_dir)
-  Service_Choice_Score.save_df_data(model_df_dict['Score'])
+  Question.save_df_data(df_from_csv(csv_dir, 'Question', ['pk', 'question_identifier', 'question_text', 'question_type']))
+  print('--- SAVED QUESTIONS SUCCESSFULLY')
+
+  Choice.save_df_data(df_from_csv(csv_dir, 'Choice', ['pk', 'question_fk', 'choice_text']))
+  print('--- SAVED CHOICES SUCCESSFULLY')
+
+  Service.save_df_data(df_from_csv(csv_dir, 'Service', ['pk', 'service_name', 'service_link', 'service_title', 'service_subtitle',
+                                   'service_description', 'service_urgency', 'service_unsalaried', 'service_image']), image_dir)
+  print('--- SAVED SERVICES SUCCESSFULLY')
+
+  Service_Choice_Score.save_df_data(df_from_csv(csv_dir, 'Score', ['pk', 'service_fk', 'choice_fk', 'score']))
+  print('--- SAVED SCORES SUCCESSFULLY')
+
   print('Data successfully stored in the database')
