@@ -122,6 +122,16 @@ def thank_you_note(request):
 class ListProfilesView(LoginRequiredMixin, ListView):
     model = Profile
 
+def profile_csv(request):
+  if request.user.is_authenticated():
+    # Create the HttpResponse object with the appropriate CSV header.
+    csv_string = Profile.get_df().to_csv()
+    response = HttpResponse(csv_string, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="profile_data.csv"'
+    return response
+  else:
+    return HttpResponseRedirect("Please log in")
+
 """ HELPER METHODS"""
 
 #not a view

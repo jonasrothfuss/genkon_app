@@ -14,4 +14,6 @@ urlpatterns = [
     url(r'^thank_you', views.thank_you_note, name='thank_you_note'),
     url(r'^list_profiles', views.ListProfilesView.as_view(), name='list_profiles'),
     url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^profile_csv', views.profile_csv, name='profile_csv'),
+
 ]
