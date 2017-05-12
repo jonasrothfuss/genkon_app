@@ -111,15 +111,32 @@ class Profile(models.Model):
   city = models.CharField("Stadt", max_length=40)
   message = models.TextField("Persönliche Nachricht", blank=True)
   selected_service = models.ForeignKey(Service, verbose_name="Gewählter Service", on_delete=models.SET_NULL, blank=True, null=True)
-  empty_profile = models.BooleanField(default=False)
+  empty_profile = models.BooleanField("Dummyprofil", default=False)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
 
   @staticmethod
-  def get_df():
-    profiles = Profile.objects.all()
+  def get_df(empty_profiles=True, choice_slection=True):
+    if empty_profiles:
+      profiles = Profile.objects.all()
+    else:
+      profiles = Profile.objects.filter(empty_profile=False)
     df = pd.DataFrame.from_records(profiles.values())
+
+    # rename and reorder df columns
+    col_name_replace_dict = dict([(field.name, field.verbose_name) for field in Profile._meta.local_fields])
+    del col_name_replace_dict['selected_service']
+    col_name_replace_dict['selected_service_id'] = 'Gewählter Service'
+    df.rename(columns=col_name_replace_dict, inplace=True)
+    df = df[['ID', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
+
+    #replace selected_service_ids with service names
+    df['Gewählter Service'] = retrieve_service_names(df['Gewählter Service'])
+
+    if choice_slection:
+      choice_selection_df = Profile_Choice_Selection.get_profile_choices_as_df()
+      df = df.merge(choice_selection_df,  left_on='ID', right_index=True)
     return df
 
   @staticmethod
@@ -146,6 +163,23 @@ class Profile_Choice_Selection(models.Model):
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
   choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
   selected = models.BooleanField()
+
+  @staticmethod
+  def get_profile_choices_as_df():
+    profiles = Profile.objects.all()
+    choices = Choice.objects.all()
+    profile_choice_dict = {}
+    for choice in choices:
+      choice_bool_array = []
+      for profile in profiles:
+        try:
+          choice_bool_array.append(Profile_Choice_Selection.objects.get(profile=profile, choice=choice).selected)
+        except:
+          choice_bool_array.append(False)
+      profile_choice_dict[choice.choice_text] = choice_bool_array
+    df = pd.DataFrame.from_dict(profile_choice_dict)
+    df.index = [profile.id for profile in profiles]
+    return df
 
 def generate_service_choice_scores_randomly():
   services = Service.objects.all()
@@ -181,3 +215,15 @@ def load_data_from_csv(csv_dir):
   print('--- SAVED SCORES SUCCESSFULLY')
 
   print('Data successfully stored in the database')
+
+def retrieve_service_names(service_ids):
+  service_names = []
+  for service_id in service_ids:
+    if np.isnan(service_id):
+      service_names.append('')
+    else:
+      try:
+        service_names.append(Service.objects.get(pk=int(service_id)).service_name)
+      except:
+        service_names.append('')
+  return service_names
