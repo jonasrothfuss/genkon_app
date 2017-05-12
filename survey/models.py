@@ -111,6 +111,7 @@ class Profile(models.Model):
   city = models.CharField("Stadt", max_length=40)
   message = models.TextField("Persönliche Nachricht", blank=True)
   selected_service = models.ForeignKey(Service, verbose_name="Gewählter Service", on_delete=models.SET_NULL, blank=True, null=True)
+  empty_profile = models.BooleanField(default=False)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
@@ -119,9 +120,11 @@ class Profile(models.Model):
   def get_df():
     profiles = Profile.objects.all()
     df = pd.DataFrame.from_records(profiles.values())
-
     return df
 
+  @staticmethod
+  def create_empty_profile():
+    return Profile(first_name="", last_name="", email="empty@empty", street="", zip_code="", city="", empty_profile = True)
 
 class Service_Choice_Score(models.Model):
   service = models.ForeignKey(Service, on_delete=models.CASCADE)
@@ -161,7 +164,6 @@ def df_from_csv(csv_dir, model, expected_cols = []):
     except Exception as e:
       if sep =='\t':
         raise AssertionError("Could not parse CSV properly - expected the following columns:" + str(expected_cols))
-
 
 def load_data_from_csv(csv_dir):
   image_dir = os.path.join(csv_dir, 'images')

@@ -14,7 +14,7 @@ class ProfileDataForm(forms.ModelForm):
                 
     class Meta:
         model = Profile
-        exclude = ['date_posted', 'selected_service']
+        exclude = ['date_posted', 'selected_service', 'empty_profile']
         
 
 class BaseChoiceForm(forms.Form):
@@ -160,17 +160,25 @@ class RowChoiceRenderer(RadioFieldRenderer):
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
 
-def safe_all_forms(session):
-    assert 'profile_post' in session
+def safe_all_forms(session, empty_profile=False):
     assert 'skills_post' in session
     assert 'interests_post' in session
-    profile = ProfileDataForm(session['profile_post']).save()
+
+    if empty_profile:#user wants to skip the profile form --> create empty profile object with empty flag set
+        profile = Profile.create_empty_profile()
+    else:
+        assert 'profile_post' in session
+        profile = ProfileDataForm(session['profile_post']).save()
+
     if 'results_post' in session:
         profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
-        profile.save()
+    profile.save()
+
+    print(profile, profile.pk)
     SkillsForm1(session['skills_post']).save(profile)
     SkillsForm2(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)
+
 
 def choice_array(session):
     assert 'skills_post' in session
