@@ -44,7 +44,7 @@ class InterestsForm(BaseChoiceForm):
             self.criteria_pk_dict[criteria] = [pk for pk, c in criteria_choices]
 
         self.question_text = self.question.question_text
-        self.choice_options = ["Interessiert", "Aufgeschlossen", "Nicht Interessiert"]
+        self.choice_options = ["Sehr Interessiert", "Interessiert", "Weniger Interessiert"]
         assert set(self.choice_options) == set(self.question.get_choice_options())
 
         for criteria, criteria_choices in self.choice_dict.items():

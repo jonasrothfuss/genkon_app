@@ -112,11 +112,18 @@ def profile_data(request):
     return render(request, 'survey/profile_data.html', context)
 
 def thank_you_note(request):
-  context = {
-    'thank_you_text': 'Vielen Dank für dein Interesse!',
-    'further_note': 'Wir werden uns demnächst mit dir in Kontakt setzen.',
-    'time_delay': 7 * 1000 # time delay in ms until redirect
-  }
+  if 'submit' in request.GET:
+    context = {
+      'thank_you_text': 'Vielen Dank für dein Interesse!',
+      'further_note': '',
+      'time_delay': 7 * 1000  # time delay in ms until redirect
+    }
+  else:
+    context = {
+      'thank_you_text': 'Vielen Dank für dein Interesse!',
+      'further_note': 'Wir werden uns demnächst mit dir in Kontakt setzen.',
+      'time_delay': 7 * 1000 # time delay in ms until redirect
+    }
   return render(request, 'survey/thank_you_note.html', context)
 
 class ListProfilesView(LoginRequiredMixin, ListView):

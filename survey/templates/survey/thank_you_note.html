@@ -8,8 +8,10 @@
 
    <div class="jumbotron">
        <h2> {{thank_you_text}} </h2>
-       <p></p>
-       <p class="lead">{{further_note}}</p>
+       {% if further_note != "" %}
+           <p></p>
+           <p class="lead">{{further_note}}</p>
+       {% endif %}
    </div>
 
 </div>
