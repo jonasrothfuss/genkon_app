@@ -3,35 +3,65 @@
 
 {% block body %}
 
-{% if form.errors %}
+    <div class="container">
+
+      <div class="jumbotron">
+        <h2>Login</h2>
+
+
+             {% if next %}
+                {% if user.is_authenticated %}
+                 <div class="row">
+                    <p>Your account doesn't have access to this page. To proceed,
+                        please login with an account that has access.</p>
+                     </div>
+                {% else %}
+                <div class="row">
+                    <p>Please login to see this page.</p>
+                </div>
+                {% endif %}
+            {% endif %}
+
+
+
+
+          <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="row" style="padding: 10px">
+                <div class="col-xs-4" style="text-align: right">
+                         <td>{{ form.username.label_tag }}</td>
+                </div>
+                <div class="col-xs-8">
+                       <td>{{ form.username }}</td>
+                </div>
+            </div>
+
+             <div class="row" style="padding: 10px">
+                <div class="col-xs-4" style="text-align: right">
+                         <td>{{ form.password.label_tag }}</td>
+                </div>
+                <div class="col-xs-8">
+                       <td>{{ form.password }}</td>
+                </div>
+            </div>
+
+              {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+            <div class="row">
+                <div class="col-xs-12">
+                     <input type="submit" value="login" class="btn btn-lg btn-success"/>
+                     <input type="hidden" name="next" value="" class="btn btn-lg btn-success"/>
+                </div>
+            </div>
+            </form>
+      </div>
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
 
-<div>
-  <td>{{ form.username.label_tag }}</td>
-  <td>{{ form.username }}</td>
-</div>
-<div>
-  <td>{{ form.password.label_tag }}</td>
-  <td>{{ form.password }}</td>
-</div>
 
-<div>
-  <input type="submit" value="login" />
-  <input type="hidden" name="next" value="" />
-</div>
-</form>
+    </div>
+
 
 {% endblock %}
