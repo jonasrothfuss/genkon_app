@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+    <div class="container">
+
+      <div class="jumbotron" style="width: 100%; max-width: none; min-width: 1000px">
+        <h2>Registrierte Helfer</h2>
+        <table class="profiletable">
+        <tr>
+            <th style="width: 64px">Details</th>
+            <th style="width: 100px">Datum</th>
+            <th>Vorname</th>
+            <th>Nachname</th> 
+            <th style="width: 64px">PLZ</th>
+            <th style="width: 120px">Stadt</th>
+            <th>E-Mail</th>
+            <th>Telefonnummer</th>
+            <th>Gewählter Dienst</th>
+        </tr>
+        
+            {% for profile in object_list %}
+                <tr>
+                    <td style="text-align: center; width: 64px"> <a class="btn btn-lg btn-success" style="font-size: 20px; padding-left: 20px;padding-right: 20px; margin: 0px" href="{% url 'profile_detail' %}?selected_profile={{profile.pk}}" role="button">+</a> </td> 
+                            <!--Später hinzufügen:   ?selected_profile={{profile.first_name}}-->
+                    <td style="width: 100px"> {{ profile.date_posted }} </td> 
+                    <td> {{ profile.first_name }} </td> 
+                    <td> {{ profile.last_name }}  </td> 
+                    <td style="width: 64px"> {{ profile.zip_code }}  </td> 
+                    <td style="width: 120px"> {{ profile.city }}  </td> 
+                    <td> {{ profile.email }} </td> 
+                    <td> {{ profile.phone_number }}  </td> 
+                    <td> {{ profile.selected_service }} </td> 
+                </tr>
+            {% endfor %}
+        </table>  
+        
+          <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-lg btn-success" href="{% url 'profile_csv' %}" role="button">Herunterladen</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'logout' %}" role="button">Abmelden</a>
+                </div>
+          </div>
+
+
+
+
+      </div>
+    </div>
+
+{% endblock %}
