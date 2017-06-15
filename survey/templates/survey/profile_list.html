@@ -17,13 +17,12 @@
             <th style="width: 120px">Stadt</th>
             <th>E-Mail</th>
             <th>Telefonnummer</th>
-            <th>Gewählter Dienst</th>
+            <th>Im Einsatz bei</th>
         </tr>
         
             {% for profile in object_list %}
                 <tr>
-                    <td style="text-align: center; width: 64px"> <a class="btn btn-lg btn-success" style="font-size: 20px; padding-left: 20px;padding-right: 20px; margin: 0px" href="{% url 'profile_detail' %}?selected_profile={{profile.pk}}" role="button">+</a> </td> 
-                            <!--Später hinzufügen:   ?selected_profile={{profile.first_name}}-->
+                    <td style="text-align: center; width: 64px"> <a class="btn btn-lg btn-success" style="font-size: 20px; padding-left: 20px;padding-right: 20px; margin: 0px" href="{% url 'profile_detail' %}?selected_profile={{profile.pk}}" role="button">+</a> </td>
                     <td style="width: 100px"> {{ profile.date_posted }} </td> 
                     <td> {{ profile.first_name }} </td> 
                     <td> {{ profile.last_name }}  </td> 
@@ -31,7 +30,7 @@
                     <td style="width: 120px"> {{ profile.city }}  </td> 
                     <td> {{ profile.email }} </td> 
                     <td> {{ profile.phone_number }}  </td> 
-                    <td> {{ profile.selected_service }} </td> 
+                    <td> {{ profile.assigned }} </td>
                 </tr>
             {% endfor %}
         </table>  
