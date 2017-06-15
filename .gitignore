@@ -21,3 +21,5 @@ static/bower_components/
 
 # Staticfiles
 staticfiles/
+
+genkon_app/secret_key.txt
