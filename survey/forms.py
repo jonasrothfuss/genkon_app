@@ -109,6 +109,29 @@ class SkillsForm2(BaseChoiceForm):
         selected_pk = int(self.data["skills2"])
         return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
 
+class SkillsForm3(BaseChoiceForm):
+    def __init__(self, *args, **kwargs):
+        super(SkillsForm3, self).__init__(*args, **kwargs)
+        self.question = Question.objects.get(question_identifier="skills3")
+
+        #age = forms.IntegerField()
+        self.fields["skills3"] = forms.IntegerField(label="")
+
+        choices = [(c.pk, c.choice_text) for c in self.question.get_choices()]
+        self.fields["skills3"] = forms.ChoiceField(label="", choices=choices, widget=RowChoiceWidget)
+
+    def is_valid(self):
+        try:
+            return int(self.data["skills3"]) in [c.pk for c in self.question.get_choices()]
+        except:
+            return False
+
+    def pk_bool_array(self):
+        assert (self.is_valid())
+        selected_pk = int(self.data["skills3"])
+        return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
+
+
 class RowWidgetRenderer(RadioFieldRenderer):
     outer_html = '{content}'
     inner_html = '<div class="col-xs-2" style="text-align: center"> <div class="checkbox"> {choice_value}{sub_widgets}</div> </div>'

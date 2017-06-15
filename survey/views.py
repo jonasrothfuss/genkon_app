@@ -35,23 +35,28 @@ def interests(request):
   context = {'form': form}
   return render(request, 'survey/interests.html', context)
 
+
+
+
 def skills(request, num_selectors_skills1=3):
   question1 = Question.objects.get(question_identifier="skills1")
   question2 = Question.objects.get(question_identifier="skills2")
+  question3 = Question.objects.get(question_identifier="skills3")
 
   if 'interests_post' in request.session: #assure that interests have been provided
     if request.method == 'POST':
       form1 = SkillsForm1(request.POST, num_selectors=num_selectors_skills1)
       form2 = SkillsForm2(request.POST)
-      if form1.is_valid() and form2.is_valid():
+      form3 = SkillsForm3(request.POST)
+      if form1.is_valid() and form2.is_valid() and form3.is_valid():
         request.session['skills_post'] = request.POST
         return HttpResponseRedirect(reverse('results'))
       else:
-        form1, form2 = setup_skills_forms(request, num_selectors_skills1)
+        form1, form2, form3 = setup_skills_forms(request, num_selectors_skills1)
     else:
-      form1, form2 = setup_skills_forms(request, num_selectors_skills1)
+      form1, form2, form3 = setup_skills_forms(request, num_selectors_skills1)
 
-    context = {'form1': form1, 'form2': form2, 'question1': question1, 'question2': question2}
+    context = {'form1': form1, 'form2': form2, 'form3': form3, 'question1': question1, 'question2': question2, 'question3': question3}
     return render(request, 'survey/skills.html', context)
 
   else: #interests were not provided yet, redirect to interests view
@@ -156,10 +161,12 @@ def setup_skills_forms(request, num_selectors_skills1):
     restored_form_data = request.session['skills_post']
     form1 = SkillsForm1(restored_form_data, num_selectors=num_selectors_skills1)
     form2 = SkillsForm2(restored_form_data)
+    form3 = SkillsForm3(restored_form_data)
   else:
     form1 = SkillsForm1(num_selectors=num_selectors_skills1)
     form2 = SkillsForm2()
-  return form1, form2
+    form3 = SkillsForm3()
+  return form1, form2, form3
 
 #not a view
 def find_matched_services(session, num_services=4):
