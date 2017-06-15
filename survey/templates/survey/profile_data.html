@@ -12,13 +12,32 @@
 
     {% for field in form %}
         <div class="row" style="padding: 10px">
+
+            {% if field.label == "Einverständnis" %}
+            <div  class="col-xs-10"><p id="terms">Ich habe die <a id="terms2" href="http://generationenkontakt.de/impressum/#privacy-policy">Datenschutzerklärung</a> gelesen und bin einverstanden. </p> </div>
+
+            <div class="col-xs-1">
+                {{ field }}
+            </div>
+
+            {% endif %}
+
+
+            {% if field.label != "Einverständnis" %}
             <div class="col-xs-4" style="text-align: right">
+                {% if field.field.required %}
+                    {{ field.label_tag }}*
+                {% else %}
                     {{ field.label_tag }}
+                {% endif%}
+
             </div>
             <div class="col-xs-8">
                    {{ field }}
             </div>
-        </div>
+            {% endif %}
+            </div>
+
     {% endfor %}
 
 

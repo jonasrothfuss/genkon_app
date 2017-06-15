@@ -13,23 +13,27 @@ body {
   height: 100%;
 }
 
-.jumbotron h1 { 
+#terms{
+    text-align: left;
+    font-size: 100%;
+}
+.jumbotron h1 {
   margin-top: 20px;
   margin-bottom: 20px;
   line-height: 1;
   color: #e46450;
-  text-align: center 
+  text-align: center
 }
 
-.jumbotron h2 { 
+.jumbotron h2 {
     margin-top: 10px;
 margin-bottom: 10px;
   line-height: 1;
   color: #e46450;
-  text-align: center 
+  text-align: center
 }
 
-.jumbotron p { 
+.jumbotron p {
   font-size: 2rem
 }
 
@@ -42,21 +46,30 @@ margin-bottom: 10px;
 }
 
 
-h6 { 
+h6 {
     font-size: 13px;
 }
 
 
-P { 
+P {
     text-align: center;
     font-weight: lighter;
 }
+p#terms{
+     display: inline;
+}
 
-a { 
+a {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+a#terms2 {
+    text-align: left;
+    display: inline;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .jumbotron {
