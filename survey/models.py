@@ -112,7 +112,7 @@ class Profile(models.Model):
   message = models.TextField("Persönliche Nachricht", blank=True)
   selected_service = models.ForeignKey(Service, verbose_name="Gewähltes Ehrenamt", on_delete=models.SET_NULL, blank=True, null=True)
   empty_profile = models.BooleanField("Dummyprofil", default=False)
-  accepted_terms = models.BooleanField("Einverständnis", blank=False, null=False)
+  accepted_terms = models.BooleanField("Einverständnis", default=False)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
