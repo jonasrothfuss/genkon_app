@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+
+{% block body %}
+
+<div class="container">
+<div class="jumbotron">
+    <h2>Steckbrief von {{selected_profile.first_name}}</h2>
+
+
+    <!--
+        <table class="profiletable">
+        <tr>
+            <th>Vorname</th>
+            <td> {{ selected_profile.first_name }}  </td> 
+        </tr>
+        <tr>
+            <th>Nachname</th>
+            <td> {{ selected_profile.last_name }}  </td> 
+        </tr>
+         <tr>
+            <th>Straße</th>
+            <td> {{ selected_profile.street }}  </td> 
+        </tr>
+        <tr>
+            <th>PLZ</th>
+            <td> {{ selected_profile.zip_code }}  </td> 
+        </tr>
+        <tr>
+            <th>Stadt</th>
+            <td> {{ selected_profile.city }}  </td> 
+        </tr>
+        <tr>
+            <th>E-Mail</th>
+            <td> {{ selected_profile.email }}  </td> 
+        </tr>
+        <tr>
+            <th>Telefonnummer</th>
+            <td> {{ selected_profile.phone_number }}  </td> 
+        </tr>
+        <tr>
+            <th>Gewählter Dienst</th>
+            <td> {{ selected_profile.selected_service }}  </td> 
+        </tr>
+        </table>
+    -->
+     {% if success_message %}
+        <div class="alert alert-success">
+          {{ success_message }}
+        </div>
+    {% endif %}
+
+
+    {% if error_message %}
+        <div class="alert alert-danger">
+          {{ error_message }}
+        </div>
+    {% endif %}
+
+    <form action={% url 'profile_detail' %}?selected_profile={{selected_profile.pk}} method="post">
+    {% csrf_token %}
+      {% for field in form %}
+        <div class="row" style="padding: 10px">
+            <div class="col-xs-4" style="text-align: right">
+                    {{ field.label_tag }}
+            </div>
+            <div class="col-xs-8">
+                   {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+    
+    <div class="row">
+                <div class="col-xs-12">
+                    <p><input type="submit" value="Herunterladen" class="btn btn-lg btn-success" />
+                    <input type="submit" value="Speichern" class="btn btn-lg btn-success" />
+                    <input type="submit" value="Löschen" class="btn btn-lg btn-success" />
+                    <a class="btn btn-lg btn-success" href="{% url 'list_profiles' %}" role="button">Zurück</a></p>
+                </div>
+            </div>
+    </form>
+</div>
+</div>
+
+{% endblock %}
