@@ -113,6 +113,10 @@ class Profile(models.Model):
   selected_service = models.ForeignKey(Service, verbose_name="Gewähltes Ehrenamt", on_delete=models.SET_NULL, blank=True, null=True)
   empty_profile = models.BooleanField("Dummyprofil", default=False)
   accepted_terms = models.BooleanField("Einverständnis", default=False)
+  deleted = models.BooleanField("Gelöscht", default=False)
+  assigned = models.CharField("Im Einsatz bei", max_length=100, blank=True)
+  remarks = models.TextField("Bearbeitungsnotizen", blank=True)
+
 
   def __str__(self):
     return self.first_name + " " + self.last_name
