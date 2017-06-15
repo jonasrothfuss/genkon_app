@@ -12,7 +12,7 @@ echo Starting Gunicorn.
 exec gunicorn genkon_app.wsgi:application \
     --name genkon_app \
     --bind 0.0.0.0:8000 \
-    --workers 1 \
+    --workers 3 \
     --log-level=info \
     --log-file=/srv/logs/gunicorn.log \
     --access-logfile=/srv/logs/access.log \
