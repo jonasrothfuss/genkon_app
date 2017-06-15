@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 INSTALLED_APPS = [
     'analytical',
+    'django_db_logger',
     'survey.apps.SurveyConfig',
     'django.contrib.admin',
     'django.contrib.auth',

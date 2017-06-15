@@ -23,24 +23,33 @@ DATABASES = {
     }
 }
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        'db_log': {
+            'level': 'WARNING',
+            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+            'handlers': ['db_log'],
+            'level': 'WARNING',
             'propagate': True,
-        },
-    },
+        }
+    }
 }
 
+#TODO: HTTPS
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
