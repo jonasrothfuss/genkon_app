@@ -20,6 +20,19 @@ class ProfileDataForm(forms.ModelForm):
         exclude = ['date_posted', 'selected_service', 'empty_profile']
         
 
+class ProfileDataEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileDataEditForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+
+
+    class Meta:
+        model = Profile
+        exclude = ['empty_profile']
+
+
+
 class BaseChoiceForm(forms.Form):
     def pk_bool_array(self):
         raise NotImplementedError("Please Implement this method")
