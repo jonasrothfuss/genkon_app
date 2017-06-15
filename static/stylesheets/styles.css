@@ -83,6 +83,8 @@ a#terms2 {
 }
 
 
+
+
 .btn-success:not(.btn-link):not(.btn-flat) {
     background-color: #0075a9;
     margin-top: 10px;
@@ -201,3 +203,26 @@ overflow-x: hidden;
   border-radius: 6px;
   width: 100%;
 }
+
+.profiletable{
+    width: 100%;
+    margin: 5px;
+    background-color:#FFFFE0;
+    border-collapse:collapse;
+    color:#000;font-size:14px; 
+    table-layout: fixed;
+}
+
+.profiletable th{
+    background-color:#0075a9;
+    color:white;
+    width:50%;
+}
+.profiletable td, .profiletable th {
+    padding:5px;
+    border:0;
+}
+.profiletable td { 
+    border-bottom:1.5px solid #e46450; 
+}
+
