@@ -36,6 +36,8 @@ RUN pip3 install -r $DOCKYARD_SRVPROJ/requirements.txt
 # Port to expose
 EXPOSE 8000
 
+
+
 # Copy entrypoint script into the image
 WORKDIR $DOCKYARD_SRVPROJ
 COPY ./docker-entrypoint.sh /

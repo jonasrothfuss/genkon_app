@@ -200,9 +200,9 @@ def safe_all_forms(session, empty_profile=False):
         profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
     profile.save()
 
-    print(profile, profile.pk)
     SkillsForm1(session['skills_post']).save(profile)
     SkillsForm2(session['skills_post']).save(profile)
+    SkillsForm3(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)
 
 
