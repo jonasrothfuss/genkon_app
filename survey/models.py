@@ -100,7 +100,7 @@ class Service(models.Model):
     #Service.objects.bulk_create(service_objects)
 
 class Profile(models.Model):
-  date_posted = models.DateField("Erstellugsdatum", default=timezone.now)
+  date_posted = models.DateField("Datum", default=timezone.now)
   first_name = models.CharField("Vorname", max_length=30)
   last_name = models.CharField("Nachname", max_length=50)
   email = models.EmailField("E-Mail")
@@ -110,7 +110,7 @@ class Profile(models.Model):
   zip_code = models.CharField("PLZ", max_length=10)
   city = models.CharField("Stadt", max_length=40)
   message = models.TextField("Persönliche Nachricht", blank=True)
-  selected_service = models.ForeignKey(Service, verbose_name="Gewählter Service", on_delete=models.SET_NULL, blank=True, null=True)
+  selected_service = models.ForeignKey(Service, verbose_name="Gewähltes Ehrenamt", on_delete=models.SET_NULL, blank=True, null=True)
   empty_profile = models.BooleanField("Dummyprofil", default=False)
   accepted_terms = models.BooleanField("Einverständnis", blank=False, null=False)
 
