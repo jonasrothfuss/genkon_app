@@ -17,7 +17,7 @@ class ProfileDataForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        exclude = ['date_posted', 'selected_service', 'empty_profile']
+        exclude = ['date_posted', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
         
 
 class ProfileDataEditForm(forms.ModelForm):
@@ -29,7 +29,7 @@ class ProfileDataEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        exclude = ['empty_profile']
+        exclude = ['empty_profile', 'deleted', 'accepted_terms']
 
 
 
