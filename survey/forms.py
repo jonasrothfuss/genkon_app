@@ -6,12 +6,15 @@ from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
 import numpy as np
 
+
 class ProfileDataForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileDataForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-                field.widget.attrs.update({'class' : 'profileform'})
-                
+            field.widget.attrs.update({'class': 'profileform'})
+            if field.label == "Einverständnis":
+                field.required = True
+
     class Meta:
         model = Profile
         exclude = ['date_posted', 'selected_service', 'empty_profile']
