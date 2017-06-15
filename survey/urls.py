@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^profile_csv', views.profile_csv, name='profile_csv'),
     url(r'^profile_detail', views.profile_detail, name='profile_detail'),
+    url(r'^delete_profile', views.delete_profile, name='delete_profile'),
 
 ]

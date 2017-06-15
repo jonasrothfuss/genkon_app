@@ -138,6 +138,18 @@ def thank_you_note(request):
 class ListProfilesView(LoginRequiredMixin, ListView):
     model = Profile
 
+
+def delete_profile(request):
+  if request.user.is_authenticated():
+    profile_id = 8 #TODO RichtigenParameter abfragen #request.GET['id']
+    profile = Profile.objects.get(pk=profile_id)
+    profile.deleted = True
+    profile.save()
+    return HttpResponseRedirect(reverse('list_profiles'))
+
+  else:
+    return HttpResponseRedirect("Please log in")
+
 def profile_detail(request):
   if request.user.is_authenticated():
 
