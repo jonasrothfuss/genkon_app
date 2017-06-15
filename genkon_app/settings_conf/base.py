@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Application definition
 
 INSTALLED_APPS = [
+    'analytical',
     'survey.apps.SurveyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -120,3 +121,6 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # Auth setting
 LOGIN_REDIRECT_URL = '/survey/list_profiles'
+
+GOOGLE_ANALYTICS_PROPERTY_ID = 'UA-101125770-1'
+GOOGLE_ANALYTICS_ANONYMIZE_IP = True

@@ -16,5 +16,4 @@ six==1.10.0
 static3==0.7.0
 whitenoise==3.3.0
 psycopg2==2.7.1
--e git://github.com/glogiotatidis/django-google-analytics.git@2dd8be61206c54a9163771cefb29ae8c4f5ec138#egg=google_analytics
--e git://github.com/glogiotatidis/django-piwik-analytics.git@0897228fc845debeb769d14fbfe8cd403a7acf7c#egg=piwik_analytics
+django-analytical==2.2.2
