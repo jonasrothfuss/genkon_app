@@ -135,17 +135,18 @@ def thank_you_note(request):
     }
   return render(request, 'survey/thank_you_note.html', context)
 
-class ListProfilesView(LoginRequiredMixin, ListView):
-    model = Profile
-
+def ListProfilesView(request):
+    activeprofiles = Profile.objects.all().filter(deleted=False) #Profile(deleted=True)
+    context = {'activeprofiles': activeprofiles}
+    return render(request, 'survey/profile_list.html', context)
 
 def delete_profile(request):
   if request.user.is_authenticated():
-    profile_id = 8 #TODO RichtigenParameter abfragen #request.GET['id']
+    profile_id = request.GET['selected_profile']
     profile = Profile.objects.get(pk=profile_id)
     profile.deleted = True
     profile.save()
-    return HttpResponseRedirect(reverse('list_profiles'))
+    return HttpResponseRedirect(reverse('profile_list'))
 
   else:
     return HttpResponseRedirect("Please log in")
@@ -171,14 +172,14 @@ def profile_detail(request):
           return render(request, 'survey/profile_detail.html', context)
 
       except:
-        return HttpResponseRedirect(reverse('list_profiles'))
+        return HttpResponseRedirect(reverse('profile_list'))
     else: #GET REQUEST
         try:
           selected_profile_pk = request.GET['selected_profile']
           selected_profile = Profile.objects.get(pk=selected_profile_pk)
           form = ProfileDataEditForm(instance=selected_profile)
         except:
-          return HttpResponseRedirect(reverse('list_profiles'))
+          return HttpResponseRedirect(reverse('profile_list'))
 
     context = {'form': form, 'selected_profile': selected_profile}
     return render(request, 'survey/profile_detail.html', context)
