@@ -122,9 +122,11 @@ class Profile(models.Model):
     return self.first_name + " " + self.last_name
 
   @staticmethod
-  def get_df(empty_profiles=True, choice_slection=True):
+  def get_df(empty_profiles=True, choice_selection=True, selection=False, selected_profile=None):
     if empty_profiles:
       profiles = Profile.objects.all()
+    elif selection:
+      profiles = Profile.objects.filter(pk=selected_profile)
     else:
       profiles = Profile.objects.filter(empty_profile=False)
     df = pd.DataFrame.from_records(profiles.values())
@@ -139,7 +141,7 @@ class Profile(models.Model):
     #replace selected_service_ids with service names
     df['Gewählter Service'] = retrieve_service_names(df['Gewählter Service'])
 
-    if choice_slection:
+    if choice_selection:
       choice_selection_df = Profile_Choice_Selection.get_profile_choices_as_df()
       df = df.merge(choice_selection_df,  left_on='ID', right_index=True)
     return df

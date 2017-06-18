@@ -73,7 +73,7 @@
     
     <div class="row">
                 <div class="col-xs-12">
-                    <p><input type="submit" value="Herunterladen" class="btn btn-lg btn-success" />
+                    <p><a class="btn btn-lg btn-success" href="{% url 'profile_detail_csv' %}?selected_profile={{selected_profile.pk}}" role="button">Herunterladen</a>
                     <input type="submit" value="Speichern" class="btn btn-lg btn-success" />
                     <a class="btn btn-lg btn-success" onclick="return confirm('Möchtest du den Helfer wirklich löschen?')"  href="{% url 'delete_profile' %}?selected_profile={{selected_profile.pk}}" role="button">Löschen</a>
                     <a class="btn btn-lg btn-success" href="{% url 'profile_list' %}" role="button">Zurück</a></p>

@@ -135,10 +135,18 @@ def thank_you_note(request):
     }
   return render(request, 'survey/thank_you_note.html', context)
 
-def ListProfilesView(request):
+class ListProfilesView(LoginRequiredMixin, ListView):
+    model = Profile
+
+
+def ListProfilesViewFEHLER(request):   #TODO Kompatibel mit Class ListProfilesView machen
+  if request.user.is_authenticated():
     activeprofiles = Profile.objects.all().filter(deleted=False) #Profile(deleted=True)
     context = {'activeprofiles': activeprofiles}
     return render(request, 'survey/profile_list.html', context)
+  else:
+    return HttpResponseRedirect("Please log in")
+
 
 def delete_profile(request):
   if request.user.is_authenticated():
@@ -174,12 +182,12 @@ def profile_detail(request):
       except:
         return HttpResponseRedirect(reverse('profile_list'))
     else: #GET REQUEST
-        try:
-          selected_profile_pk = request.GET['selected_profile']
-          selected_profile = Profile.objects.get(pk=selected_profile_pk)
-          form = ProfileDataEditForm(instance=selected_profile)
-        except:
-          return HttpResponseRedirect(reverse('profile_list'))
+      try:
+       selected_profile_pk = request.GET['selected_profile']
+       selected_profile = Profile.objects.get(pk=selected_profile_pk)
+       form = ProfileDataEditForm(instance=selected_profile)
+      except:
+        return HttpResponseRedirect(reverse('profile_list'))
 
     context = {'form': form, 'selected_profile': selected_profile}
     return render(request, 'survey/profile_detail.html', context)
@@ -187,13 +195,56 @@ def profile_detail(request):
   else:
     return HttpResponseRedirect("Please log in")
 
+def profile_new(request):
+  if request.user.is_authenticated():
+
+    if request.method == 'POST':
+      try:
+        form = NewProfileForm(request.POST)
+        if form.is_valid():
+          form.save()
+          return HttpResponseRedirect(reverse('profile_list'))
+        else:
+          context = {'form': form, 'error_message': 'Der neue Helfer konnte nicht gespeichert werden.'}
+          return render(request, 'survey/profile_new.html', context)
+
+      except:
+        return HttpResponseRedirect(reverse('profile_list'))
+    else: #GET REQUEST
+        try:
+          form = NewProfileForm()
+        except:
+          return HttpResponseRedirect(reverse('profile_list'))
+    context = {'form': form}
+    return render(request, 'survey/profile_new.html', context)
+
+  else:
+    return HttpResponseRedirect("Please log in")
+
+def profile_detail_csv(request):
+  if request.user.is_authenticated():
+    selected_profile_pk = request.GET['selected_profile']
+    selected_profile = Profile.objects.get(pk=selected_profile_pk)
+    # Create the HttpResponse object with the appropriate CSV header.
+    csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False, selection=True).to_csv()
+    response = HttpResponse(csv_string, content_type='text/csv')
+    filename = 'attachment; filename= "' + selected_profile.first_name + '_' + selected_profile.last_name + '.csv"'
+    response['Content-Disposition'] = filename
+    return response
+
+
+  else:
+    return HttpResponseRedirect("Please log in")
+
+
+
 
 def profile_csv(request):
   if request.user.is_authenticated():
     # Create the HttpResponse object with the appropriate CSV header.
     csv_string = Profile.get_df().to_csv()
     response = HttpResponse(csv_string, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="profile_data.csv"'
+    response['Content-Disposition'] = 'attachment; filename="Helferliste.csv"'
     return response
   else:
     return HttpResponseRedirect("Please log in")
