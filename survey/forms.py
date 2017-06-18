@@ -14,19 +14,26 @@ class ProfileDataForm(forms.ModelForm):
             field.widget.attrs.update({'class': 'profileform'})
             if field.label == "Einverständnis":
                 field.required = True
-
     class Meta:
         model = Profile
         exclude = ['date_posted', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
         
+
+class NewProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(NewProfileForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+    class Meta:
+        model = Profile
+        exclude = ['empty_profile', 'deleted']
+
 
 class ProfileDataEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileDataEditForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
                 field.widget.attrs.update({'class' : 'profileform'})
-
-
     class Meta:
         model = Profile
         exclude = ['empty_profile', 'deleted', 'accepted_terms']
