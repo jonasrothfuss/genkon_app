@@ -145,7 +145,7 @@ def ListProfilesViewFEHLER(request):   #TODO Kompatibel mit Class ListProfilesVi
     context = {'activeprofiles': activeprofiles}
     return render(request, 'survey/profile_list.html', context)
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 
 def delete_profile(request):
@@ -157,7 +157,7 @@ def delete_profile(request):
     return HttpResponseRedirect(reverse('profile_list'))
 
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 def profile_detail(request):
   if request.user.is_authenticated():
@@ -193,7 +193,7 @@ def profile_detail(request):
     return render(request, 'survey/profile_detail.html', context)
 
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 def profile_new(request):
   if request.user.is_authenticated():
@@ -219,7 +219,7 @@ def profile_new(request):
     return render(request, 'survey/profile_new.html', context)
 
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 def profile_detail_csv(request):
   if request.user.is_authenticated():
@@ -234,7 +234,7 @@ def profile_detail_csv(request):
 
 
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 
 
@@ -247,7 +247,7 @@ def profile_csv(request):
     response['Content-Disposition'] = 'attachment; filename="Helferliste.csv"'
     return response
   else:
-    return HttpResponseRedirect("Please log in")
+    return HttpResponse("Bitte melde dich an")
 
 """ HELPER METHODS"""
 
