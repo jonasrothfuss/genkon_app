@@ -39,6 +39,16 @@ class ProfileDataEditForm(forms.ModelForm):
         exclude = ['empty_profile', 'deleted', 'accepted_terms']
 
 
+class SkipForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SkipForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+    class Meta:
+        model = Profile
+        exclude = ['date_posted', 'phone_number', 'occupation', 'street', 'city',
+                   'message', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
+
 
 class BaseChoiceForm(forms.Form):
     def pk_bool_array(self):

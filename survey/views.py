@@ -109,15 +109,57 @@ def profile_data(request):
         form = ProfileDataForm(restored_form_data)
 
     else:
-       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> store survey data with dummy data
-        safe_all_forms(request.session, empty_profile=True)
-        clear_session(request)
-        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> redirect to skip-form
+        return HttpResponseRedirect(reverse('skip'))
        else:
         form = ProfileDataForm(restored_form_data)
 
-    context = {'form': form}
+    if 'results_post' in request.session:
+      title = 'Möchtest du eine unverbindliche Anfrage starten?'
+    else:
+      title = 'Bist du dennoch interessiert dich beim DRK einzubringen?'
+
+    context = {'form': form, 'title': title}
     return render(request, 'survey/profile_data.html', context)
+
+
+def skip(request):
+  """ Check if skill and interest form data is stored in session """
+  if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
+    return HttpResponseRedirect(reverse('interests'))
+  elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
+    return HttpResponseRedirect(reverse('skills'))
+
+  else:  # interests and skills are provided --> proceed with profile data
+
+    if 'profile_post' in request.session:
+      restored_form_data = request.session['profile_post']
+    else:
+      restored_form_data = {}
+
+    if request.method == 'POST':
+      form = SkipForm(request.POST)
+      if form.is_valid():
+        request.session['profile_post'] = request.POST
+
+        safe_all_forms(request.session)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note'))
+      else:
+        form = SkipForm(restored_form_data)
+
+    else:
+      if 'empty_profile' in request.GET and int(
+              request.GET['empty_profile']) == 1:  # user also wants to skip the form --> store survey data with dummy data
+        safe_all_forms(request.session, empty_profile=True)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+      else:
+        form = SkipForm(restored_form_data)
+
+    context = {'form': form}
+    return render(request, 'survey/skip.html', context)
+
 
 def thank_you_note(request):
   if 'submit' in request.GET:
