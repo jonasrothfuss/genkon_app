@@ -6,7 +6,9 @@
 
 <div class="container">
 <div class="jumbotron">
-    <h2>Willst du gleich eine Anfrage starten?</h2>
+    {% if title %}
+        <h2> {{ title }} </h2>
+    {% endif %}
     <form action={% url 'profile_data' %} method="post">
     {% csrf_token %}
 
