@@ -7,16 +7,51 @@ from django.utils.encoding import force_text
 from django.forms.widgets import CheckboxFieldRenderer, Select
 import numpy as np
 
+
 class ProfileDataForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileDataForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-                field.widget.attrs.update({'class' : 'profileform'})
-                
+            field.widget.attrs.update({'class': 'profileform'})
+            if field.label == "Einverständnis":
+                field.required = True
     class Meta:
         model = Profile
-        exclude = ['date_posted', 'selected_service', 'empty_profile']
+        exclude = ['date_posted', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
         
+
+class NewProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(NewProfileForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+    class Meta:
+        model = Profile
+        exclude = ['empty_profile', 'deleted']
+
+
+class ProfileDataEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ProfileDataEditForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+    class Meta:
+        model = Profile
+        exclude = ['empty_profile', 'deleted', 'accepted_terms']
+
+
+class SkipForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SkipForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+                field.widget.attrs.update({'class' : 'profileform'})
+                if field.label == "Einverständnis":
+                    field.required = True
+    class Meta:
+        model = Profile
+        exclude = ['date_posted', 'phone_number', 'occupation', 'street', 'city',
+                   'message', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
+
 
 class BaseChoiceForm(forms.Form):
     def pk_bool_array(self):
@@ -216,15 +251,21 @@ class RowChoiceRenderer(RadioFieldRenderer):
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
 
+
 class RowChoiceWidget2(forms.CheckboxSelectMultiple):
     renderer = RowWidgetRendererCheckbox
 
-def safe_all_forms(session, empty_profile=False):
+
+def safe_all_forms(session, empty_profile=False, skip_profile=False):
     assert 'skills_post' in session
     assert 'interests_post' in session
 
     if empty_profile:#user wants to skip the profile form --> create empty profile object with empty flag set
         profile = Profile.create_empty_profile()
+    elif skip_profile:#user did not fill in all profile data
+        assert 'profile_post' in session
+        profile = SkipForm(session['profile_post']).save()
+
     else:
         assert 'profile_post' in session
         profile = ProfileDataForm(session['profile_post']).save()
@@ -233,9 +274,9 @@ def safe_all_forms(session, empty_profile=False):
         profile.selected_service = Service.objects.get(pk=int(session['results_post']['service']))
     profile.save()
 
-    print(profile, profile.pk)
     SkillsForm1(session['skills_post']).save(profile)
     SkillsForm2(session['skills_post']).save(profile)
+    SkillsForm3(session['skills_post']).save(profile)
     InterestsForm(session['interests_post']).save(profile)
 
 

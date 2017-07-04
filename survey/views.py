@@ -5,6 +5,7 @@ from django.views.generic import ListView
 from .models import *
 from .forms import *
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 import numpy as np
 import math
 from pprint import pprint
@@ -34,8 +35,6 @@ def interests(request):
 
   context = {'form': form}
   return render(request, 'survey/interests.html', context)
-
-
 
 
 def skills(request, num_selectors_skills1=3):
@@ -85,6 +84,7 @@ def results(request):
       return render(request, 'survey/results.html', context)
 
 def profile_data(request):
+  error_message = ""
   """ Check if skill and interest form data is stored in session """
   if 'interests_post' not in request.session:  #interests were not provided yet, redirect to interests view
     return HttpResponseRedirect(reverse('interests'))
@@ -99,26 +99,68 @@ def profile_data(request):
       restored_form_data = {}
 
     if request.method == 'POST':
+      request.session['profile_post'] = request.POST
       form = ProfileDataForm(request.POST)
       if form.is_valid():
-        request.session['profile_post'] = request.POST
-
         safe_all_forms(request.session)
         clear_session(request)
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
         form = ProfileDataForm(restored_form_data)
 
     else:
-       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> store survey data with dummy data
-        safe_all_forms(request.session, empty_profile=True)
-        clear_session(request)
-        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> redirect to skip-form
+        return HttpResponseRedirect(reverse('skip'))
        else:
         form = ProfileDataForm(restored_form_data)
 
-    context = {'form': form}
+    if 'results_post' in request.session:
+      title = 'Möchtest Du eine unverbindliche Anfrage starten?'
+    else:
+      title = 'Bist du dennoch interessiert Dich beim DRK einzubringen?'
+
+    context = {'form': form, 'title': title, 'error_message': error_message}
     return render(request, 'survey/profile_data.html', context)
+
+
+def skip(request):
+  error_message = ""
+  """ Check if skill and interest form data is stored in session """
+  if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
+    return HttpResponseRedirect(reverse('interests'))
+  elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
+    return HttpResponseRedirect(reverse('skills'))
+  else:  # interests and skills are provided --> proceed with profile data
+
+    if 'profile_post' in request.session:
+      restored_form_data = request.session['profile_post']
+    else:
+      restored_form_data = {}
+
+    if request.method == 'POST':
+      request.session['profile_post'] = request.POST
+      form = SkipForm(request.POST)
+      if form.is_valid():
+        safe_all_forms(request.session, skip_profile=True)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note'))
+      else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
+        form = SkipForm(restored_form_data)
+
+    else:
+      if 'empty_profile' in request.GET and int(
+              request.GET['empty_profile']) == 1:  # user also wants to skip the form --> store survey data with dummy data
+        safe_all_forms(request.session, empty_profile=True)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+      else:
+        form = SkipForm(restored_form_data)
+
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'survey/skip.html', context)
+
 
 def thank_you_note(request):
   if 'submit' in request.GET:
@@ -135,18 +177,101 @@ def thank_you_note(request):
     }
   return render(request, 'survey/thank_you_note.html', context)
 
-class ListProfilesView(LoginRequiredMixin, ListView):
-    model = Profile
+""" Internal Profile List Views"""
 
+@login_required
+def profile_list(request):   #TODO Kompatibel mit Class ListProfilesView machen
+  activeprofiles = Profile.objects.all().filter(deleted=False) #Profile(deleted=True)
+  context = {'activeprofiles': activeprofiles}
+  return render(request, 'survey/profile_list.html', context)
+
+@login_required
+def delete_profile(request):
+    profile_id = request.GET['selected_profile']
+    profile = Profile.objects.get(pk=profile_id)
+    profile.deleted = True
+    profile.save()
+    return HttpResponseRedirect(reverse('profile_list'))
+
+@login_required
+def profile_detail(request):
+  if request.method == 'POST':
+    try:
+      selected_profile_pk = request.GET['selected_profile']
+      model, created = Profile.objects.get_or_create(pk=selected_profile_pk)
+      form = ProfileDataEditForm(request.POST, instance=model)
+      if form.is_valid():
+        form.save()
+        selected_profile = Profile.objects.get(pk=selected_profile_pk)
+        form = ProfileDataEditForm(instance=selected_profile)
+        context = {'form': form, 'selected_profile': selected_profile, 'success_message': 'Steckbrief wurde gespeichert.'}
+        return render(request, 'survey/profile_detail.html', context)
+      else:
+        selected_profile = Profile.objects.get(pk=selected_profile_pk)
+        form = ProfileDataEditForm(instance=selected_profile)
+        context = {'form': form, 'selected_profile': selected_profile, 'error_message': 'Profildaten konnten nicht gespeichert werden.'}
+        return render(request, 'survey/profile_detail.html', context)
+
+    except:
+      return HttpResponseRedirect(reverse('profile_list'))
+  else: #GET REQUEST
+    try:
+     selected_profile_pk = request.GET['selected_profile']
+     selected_profile = Profile.objects.get(pk=selected_profile_pk)
+     form = ProfileDataEditForm(instance=selected_profile)
+    except:
+      return HttpResponseRedirect(reverse('profile_list'))
+
+    context = {'form': form, 'selected_profile': selected_profile}
+    return render(request, 'survey/profile_detail.html', context)
+
+@login_required
+def profile_new(request):
+  if request.method == 'POST':
+    try:
+      form = NewProfileForm(request.POST)
+      if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('profile_list'))
+      else:
+        context = {'form': form, 'error_message': 'Der neue Helfer konnte nicht gespeichert werden.'}
+        return render(request, 'survey/profile_new.html', context)
+
+    except:
+      return HttpResponseRedirect(reverse('profile_list'))
+  else: #GET REQUEST
+    try:
+      form = NewProfileForm()
+    except:
+      return HttpResponseRedirect(reverse('profile_list'))
+    context = {'form': form}
+    return render(request, 'survey/profile_new.html', context)
+
+@login_required
+def scores(request):
+    scores = Service_Choice_Score.objects.all()
+    form = ScoreForm()
+    context = {'allscore': scores, 'form': form}
+    return render(request, 'survey/scores.html', context)
+
+@login_required
+def profile_detail_csv(request):
+  selected_profile_pk = request.GET['selected_profile']
+  selected_profile = Profile.objects.get(pk=selected_profile_pk)
+  # Create the HttpResponse object with the appropriate CSV header.
+  csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False).to_csv()
+  response = HttpResponse(csv_string, content_type='text/csv')
+  filename = 'attachment; filename= "' + selected_profile.first_name + '_' + selected_profile.last_name + '.csv"'
+  response['Content-Disposition'] = filename
+  return response
+
+@login_required
 def profile_csv(request):
-  if request.user.is_authenticated():
-    # Create the HttpResponse object with the appropriate CSV header.
-    csv_string = Profile.get_df().to_csv()
-    response = HttpResponse(csv_string, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="profile_data.csv"'
-    return response
-  else:
-    return HttpResponseRedirect("Please log in")
+  # Create the HttpResponse object with the appropriate CSV header.
+  csv_string = Profile.get_df().to_csv()
+  response = HttpResponse(csv_string, content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="Helferliste.csv"'
+  return response
 
 """ HELPER METHODS"""
 

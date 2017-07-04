@@ -100,7 +100,7 @@ class Service(models.Model):
     #Service.objects.bulk_create(service_objects)
 
 class Profile(models.Model):
-  date_posted = models.DateField("Erstellugsdatum", default=timezone.now)
+  date_posted = models.DateField("Datum", default=timezone.now)
   first_name = models.CharField("Vorname", max_length=30)
   last_name = models.CharField("Nachname", max_length=50)
   email = models.EmailField("E-Mail")
@@ -110,16 +110,23 @@ class Profile(models.Model):
   zip_code = models.CharField("PLZ", max_length=10)
   city = models.CharField("Stadt", max_length=40)
   message = models.TextField("Persönliche Nachricht", blank=True)
-  selected_service = models.ForeignKey(Service, verbose_name="Gewählter Service", on_delete=models.SET_NULL, blank=True, null=True)
+  selected_service = models.ForeignKey(Service, verbose_name="Gewähltes Ehrenamt", on_delete=models.SET_NULL, blank=True, null=True)
   empty_profile = models.BooleanField("Dummyprofil", default=False)
+  accepted_terms = models.BooleanField("Einverständnis", default=False)
+  deleted = models.BooleanField("Gelöscht", default=False)
+  assigned = models.CharField("Im Einsatz bei", max_length=100, blank=True)
+  remarks = models.TextField("Bearbeitungsnotizen", blank=True)
+
 
   def __str__(self):
     return self.first_name + " " + self.last_name
 
   @staticmethod
-  def get_df(empty_profiles=True, choice_slection=True):
+  def get_df(empty_profiles=True, choice_selection=True, selection=False, selected_profile=None):
     if empty_profiles:
       profiles = Profile.objects.all()
+    elif selection:
+      profiles = Profile.objects.filter(pk=selected_profile)
     else:
       profiles = Profile.objects.filter(empty_profile=False)
     df = pd.DataFrame.from_records(profiles.values())
@@ -134,7 +141,7 @@ class Profile(models.Model):
     #replace selected_service_ids with service names
     df['Gewählter Service'] = retrieve_service_names(df['Gewählter Service'])
 
-    if choice_slection:
+    if choice_selection:
       choice_selection_df = Profile_Choice_Selection.get_profile_choices_as_df()
       df = df.merge(choice_selection_df,  left_on='ID', right_index=True)
     return df

@@ -15,23 +15,27 @@ body {
   height: 100%;
 }
 
-.jumbotron h1 { 
+#terms{
+    text-align: left;
+    font-size: 100%;
+}
+.jumbotron h1 {
   margin-top: 20px;
   margin-bottom: 20px;
   line-height: 1;
   color: #e46450;
-  text-align: center 
+  text-align: center
 }
 
-.jumbotron h2 { 
+.jumbotron h2 {
     margin-top: 10px;
 margin-bottom: 10px;
   line-height: 1;
   color: #e46450;
-  text-align: center 
+  text-align: center
 }
 
-.jumbotron p { 
+.jumbotron p {
   font-size: 2rem
 }
 
@@ -44,21 +48,30 @@ margin-bottom: 10px;
 }
 
 
-h6 { 
+h6 {
     font-size: 13px;
 }
 
 
-P { 
+P {
     text-align: center;
     font-weight: lighter;
 }
+p#terms{
+     display: inline;
+}
 
-a { 
+a {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+a#terms2 {
+    text-align: left;
+    display: inline;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .jumbotron {
@@ -70,6 +83,8 @@ a {
     margin-left: auto;
     margin-right: auto;
 }
+
+
 
 
 .btn-success:not(.btn-link):not(.btn-flat) {
@@ -190,3 +205,26 @@ overflow-x: hidden;
   border-radius: 6px;
   width: 100%;
 }
+
+.profiletable{
+    width: 100%;
+    margin: 5px;
+    background-color:#FFFFE0;
+    border-collapse:collapse;
+    color:#000;font-size:14px; 
+    table-layout: fixed;
+}
+
+.profiletable th{
+    background-color:#0075a9;
+    color:white;
+    width:50%;
+}
+.profiletable td, .profiletable th {
+    padding:5px;
+    border:0;
+}
+.profiletable td { 
+    border-bottom:1.5px solid #e46450; 
+}
+

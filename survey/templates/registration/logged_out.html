@@ -2,7 +2,18 @@
 
 
 {% block body %}
-<p>Logged out!</p>
+<div class="container">
+<div class="jumbotron">
+    <h2>Erfolgreich abgemeldet</h2>
+        
+    
+    <div class="row">
+                <div class="col-xs-12">
+                    <p><a class="btn btn-lg btn-success" href="{% url 'login' %}" role="button">Erneut anmelden</a>
+                </div>
+            </div>
+</div>
+</div>
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+
 {% endblock %}
