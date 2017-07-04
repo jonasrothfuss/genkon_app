@@ -250,8 +250,7 @@ def profile_new(request):
 @login_required
 def scores(request):
     scores = Service_Choice_Score.objects.all()
-    form = ScoreForm()
-    context = {'allscore': scores, 'form': form}
+    context = {'allscore': scores}
     return render(request, 'survey/scores.html', context)
 
 @login_required
