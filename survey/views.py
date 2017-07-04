@@ -248,11 +248,18 @@ def profile_new(request):
     return render(request, 'survey/profile_new.html', context)
 
 @login_required
+def scores(request):
+    scores = Service_Choice_Score.objects.all()
+    form = ScoreForm()
+    context = {'allscore': scores, 'form': form}
+    return render(request, 'survey/scores.html', context)
+
+@login_required
 def profile_detail_csv(request):
   selected_profile_pk = request.GET['selected_profile']
   selected_profile = Profile.objects.get(pk=selected_profile_pk)
   # Create the HttpResponse object with the appropriate CSV header.
-  csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False, selection=True).to_csv()
+  csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False).to_csv()
   response = HttpResponse(csv_string, content_type='text/csv')
   filename = 'attachment; filename= "' + selected_profile.first_name + '_' + selected_profile.last_name + '.csv"'
   response['Content-Disposition'] = filename

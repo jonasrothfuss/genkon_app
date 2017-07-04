@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^profile_detail', views.profile_detail, name='profile_detail'),
     url(r'^profile_new', views.profile_new, name='profile_new'),
     url(r'^delete_profile', views.delete_profile, name='delete_profile'),
+    url(r'^scores', views.scores, name='scores'),
     url(r'^skip', views.skip, name='skip'),
 
 ]
