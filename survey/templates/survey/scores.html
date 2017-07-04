@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+
+{% block body %}
+
+<div class="container">
+<div class="jumbotron">
+    <h2>Verknüpfungen editieren</h2>
+     {% if success_message %}
+        <div class="alert alert-success">
+          {{ success_message }}
+        </div>
+    {% endif %}
+
+
+    {% if error_message %}
+        <div class="alert alert-danger">
+          {{ error_message }}
+        </div>
+    {% endif %}
+    <table id="myTable" class="profiletable">
+            <tr>
+                <th>Dienst</th>
+                <th>Antwort</th>
+                <th>Score</th>
+            </tr>
+    {% for score in allscore %}
+                <tr>
+                    <td> {{ score.service }} </td>
+                    <td> {{ score.choice }} </td>
+                    <td> {{ score.score }}  </td>
+                    <td> {{ score.pk }}  </td>
+                </tr>
+    {% endfor %}
+    </table>
+    <form action={% url 'scores' %} method="post">
+    {% csrf_token %}
+      {% for field in form %}
+        <div class="row" style="padding: 10px">
+            <div class="col-xs-4" style="text-align: right">
+                    {{ field.label_tag }}
+            </div>
+            <div class="col-xs-8">
+                   {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row">
+                <div class="col-xs-12">
+                    <p>
+                    <input type="submit" value="Speichern" class="btn btn-lg btn-success" />
+                    <a class="btn btn-lg btn-success" href="{% url 'profile_list' %}" role="button">Abbrechen</a></p>
+                </div>
+            </div>
+    </form>
+</div>
+</div>
+
+
+{% endblock %}

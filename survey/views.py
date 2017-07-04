@@ -84,6 +84,7 @@ def results(request):
       return render(request, 'survey/results.html', context)
 
 def profile_data(request):
+  error_message = ""
   """ Check if skill and interest form data is stored in session """
   if 'interests_post' not in request.session:  #interests were not provided yet, redirect to interests view
     return HttpResponseRedirect(reverse('interests'))
@@ -98,26 +99,68 @@ def profile_data(request):
       restored_form_data = {}
 
     if request.method == 'POST':
+      request.session['profile_post'] = request.POST
       form = ProfileDataForm(request.POST)
       if form.is_valid():
-        request.session['profile_post'] = request.POST
-
         safe_all_forms(request.session)
         clear_session(request)
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
         form = ProfileDataForm(restored_form_data)
 
     else:
-       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> store survey data with dummy data
-        safe_all_forms(request.session, empty_profile=True)
-        clear_session(request)
-        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+       if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> redirect to skip-form
+        return HttpResponseRedirect(reverse('skip'))
        else:
         form = ProfileDataForm(restored_form_data)
 
-    context = {'form': form}
+    if 'results_post' in request.session:
+      title = 'Möchtest Du eine unverbindliche Anfrage starten?'
+    else:
+      title = 'Bist du dennoch interessiert Dich beim DRK einzubringen?'
+
+    context = {'form': form, 'title': title, 'error_message': error_message}
     return render(request, 'survey/profile_data.html', context)
+
+
+def skip(request):
+  error_message = ""
+  """ Check if skill and interest form data is stored in session """
+  if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
+    return HttpResponseRedirect(reverse('interests'))
+  elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
+    return HttpResponseRedirect(reverse('skills'))
+  else:  # interests and skills are provided --> proceed with profile data
+
+    if 'profile_post' in request.session:
+      restored_form_data = request.session['profile_post']
+    else:
+      restored_form_data = {}
+
+    if request.method == 'POST':
+      request.session['profile_post'] = request.POST
+      form = SkipForm(request.POST)
+      if form.is_valid():
+        safe_all_forms(request.session, skip_profile=True)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note'))
+      else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
+        form = SkipForm(restored_form_data)
+
+    else:
+      if 'empty_profile' in request.GET and int(
+              request.GET['empty_profile']) == 1:  # user also wants to skip the form --> store survey data with dummy data
+        safe_all_forms(request.session, empty_profile=True)
+        clear_session(request)
+        return HttpResponseRedirect(reverse('thank_you_note') + "?submit=0")
+      else:
+        form = SkipForm(restored_form_data)
+
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'survey/skip.html', context)
+
 
 def thank_you_note(request):
   if 'submit' in request.GET:
@@ -205,11 +248,18 @@ def profile_new(request):
     return render(request, 'survey/profile_new.html', context)
 
 @login_required
+def scores(request):
+    scores = Service_Choice_Score.objects.all()
+    form = ScoreForm()
+    context = {'allscore': scores, 'form': form}
+    return render(request, 'survey/scores.html', context)
+
+@login_required
 def profile_detail_csv(request):
   selected_profile_pk = request.GET['selected_profile']
   selected_profile = Profile.objects.get(pk=selected_profile_pk)
   # Create the HttpResponse object with the appropriate CSV header.
-  csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False, selection=True).to_csv()
+  csv_string = Profile.get_df(selected_profile=selected_profile_pk, empty_profiles=False).to_csv()
   response = HttpResponse(csv_string, content_type='text/csv')
   filename = 'attachment; filename= "' + selected_profile.first_name + '_' + selected_profile.last_name + '.csv"'
   response['Content-Disposition'] = filename

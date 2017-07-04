@@ -3,7 +3,9 @@ html {
 	-webkit-font-smoothing: antialiased;
     height: 100%;
 }
-
+.checkbox input[type=checkbox] {
+    opacity: 1;
+}
 
 
 body {
