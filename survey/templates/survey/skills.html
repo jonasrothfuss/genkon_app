@@ -3,6 +3,7 @@
 
 {% block body %}
 
+
 <div class="container">
 
 
@@ -13,18 +14,59 @@
          <div class="jumbotron">
             <h2>{{question1.question_text}}</h2>
             {% for field in form1 %}
-                <div class="row" style="padding-left: 20%; padding-right: 20%">
+                <div class="row" style="padding-left: 40%;">
                     <div class="col-xs-12">
                         <p>{{field}}</p>
                     </div>
                 </div>
             {% endfor %}
+
          </div>
-         
+
+         <script>
+         window.setInterval(begrenze, 1);
+         var els2 = [];
+         function begrenze(){
+             var els = document.getElementsByName("skills1");
+             var total = 0;
+
+            for (var i = 0; i <els.length; i++){
+             if(els[i].checked ){
+                els2.push(els[i]);
+                total++;
+                console.log("Hab gechecked");
+                }
+            }
+
+            if(total >3){
+
+                console.log("DRIN");
+                for (var i =0; i < els.length ; i++){
+
+                    if(els[i].checked){
+                        els[i].checked = false;
+                        break;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+             }
+
+
+          }
+
+
+
+
+         </script>
+
          <!-- FORM PART 2 -->
          <div class="jumbotron">
             <h2>{{question2.question_text}}</h2>
+
             <div class="row" style="padding-left: 40%">
+
                 <div class="col-xs-12">
                       {{form2}}
                 </div>

@@ -4,6 +4,7 @@ from django.forms.widgets import RadioFieldRenderer, Select
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
+from django.forms.widgets import CheckboxFieldRenderer, Select
 import numpy as np
 
 class ProfileDataForm(forms.ModelForm):
@@ -66,29 +67,22 @@ class SkillsForm1(BaseChoiceForm):
     def __init__(self, *args, num_selectors=1, num_required_fields=1, **kwargs):
         super(SkillsForm1, self).__init__(*args, **kwargs)
 
-        self.num_required_fields = num_required_fields
-        self.num_selectors = num_selectors
         self.question = Question.objects.get(question_identifier="skills1")
-        choices = [('', '')] + [(c.pk, c.choice_text) for c in self.question.get_choices()]
-
-        for i in range(self.num_selectors):
-            required = i < num_required_fields
-            self.fields['skills1_' + str(i)] = forms.ChoiceField(widget=Select(attrs={'class': "form-control"}), choices=choices, label='', required=required)
+        choices = [(c.pk, c.choice_text) for c in self.question.get_choices()]
+        self.fields["skills1"] = forms.ChoiceField(label="", choices=choices, widget=RowChoiceWidget2)
 
     def is_valid(self):
         try:
-            selected_skills = [int(self.data[field_name]) for field_name in self.fields.keys() if self.data[field_name] != '']
-            valid_skill_choices = [c.pk for c in self.question.get_choices()]
-            valid_values = all([skill in valid_skill_choices for skill in selected_skills])
-            enough_skills_selected = len(set(selected_skills)) >= self.num_required_fields
-            return valid_values and enough_skills_selected
+            return int(self.data["skills1"]) in [c.pk for c in self.question.get_choices()]
         except:
             return False
 
     def pk_bool_array(self):
         assert (self.is_valid())
-        selected_pks = [int(self.data['skills1_' + str(i)]) for i in range(self.num_selectors) if not self.data['skills1_' + str(i)] == ""]
-        return [(c, c.pk in selected_pks) for c in self.question.get_choices()]
+        selected_pk = int(self.data["skills1"])
+        return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
+
+
 
 class SkillsForm2(BaseChoiceForm):
     def __init__(self, *args, **kwargs):
@@ -171,6 +165,45 @@ class RowWidgetRenderer(RadioFieldRenderer):
             content=mark_safe('\n'.join(output)),
         )
 
+
+class RowWidgetRendererCheckbox(CheckboxFieldRenderer):
+    outer_html = '{content}'
+    inner_html = '<div class="col-xs-12" style="text-align: left"> <div class="checkbox skills"> {choice_value}{sub_widgets}</div> </div>'
+
+    def render(self):
+        """
+        Outputs a <ul> for this set of choice fields.
+        If an id was given to the field, it is applied to the <ul> (each
+        item in the list will get an id of `$id_$i`).
+        """
+        id_ = self.attrs.get('id')
+        output = []
+        for i, choice in enumerate(self.choices):
+            choice_value, choice_label = choice
+            if isinstance(choice_label, (tuple, list)):
+                attrs_plus = self.attrs.copy()
+                if id_:
+                    attrs_plus['id'] += '_{}'.format(i)
+                sub_ul_renderer = self.__class__(
+                    name=self.name,
+                    value=self.value,
+                    attrs=attrs_plus,
+                    choices=choice_label,
+                )
+                sub_ul_renderer.choice_input_class = self.choice_input_class
+                output.append(format_html(
+                    self.inner_html, choice_value=choice_value,
+                    sub_widgets=sub_ul_renderer.render(),
+                ))
+            else:
+                w = self.choice_input_class(self.name, self.value, self.attrs.copy(), choice, i)
+                output.append(format_html(self.inner_html, choice_value=force_text(w), sub_widgets=''))
+        return format_html(
+            self.outer_html,
+            id_attr=format_html(' id="{}"', id_) if id_ else '',
+            content=mark_safe('\n'.join(output)),
+        )
+
 class RowSelectWidget(forms.RadioSelect):
     renderer = RowWidgetRenderer
 
@@ -182,6 +215,9 @@ class RowChoiceRenderer(RadioFieldRenderer):
 
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
+
+class RowChoiceWidget2(forms.CheckboxSelectMultiple):
+    renderer = RowWidgetRendererCheckbox
 
 def safe_all_forms(session, empty_profile=False):
     assert 'skills_post' in session
