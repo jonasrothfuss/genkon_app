@@ -84,6 +84,7 @@ def results(request):
       return render(request, 'survey/results.html', context)
 
 def profile_data(request):
+  error_message = ""
   """ Check if skill and interest form data is stored in session """
   if 'interests_post' not in request.session:  #interests were not provided yet, redirect to interests view
     return HttpResponseRedirect(reverse('interests'))
@@ -98,14 +99,14 @@ def profile_data(request):
       restored_form_data = {}
 
     if request.method == 'POST':
+      request.session['profile_post'] = request.POST
       form = ProfileDataForm(request.POST)
       if form.is_valid():
-        request.session['profile_post'] = request.POST
-
         safe_all_forms(request.session)
         clear_session(request)
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
         form = ProfileDataForm(restored_form_data)
 
     else:
@@ -115,21 +116,21 @@ def profile_data(request):
         form = ProfileDataForm(restored_form_data)
 
     if 'results_post' in request.session:
-      title = 'Möchtest du eine unverbindliche Anfrage starten?'
+      title = 'Möchtest Du eine unverbindliche Anfrage starten?'
     else:
-      title = 'Bist du dennoch interessiert dich beim DRK einzubringen?'
+      title = 'Bist du dennoch interessiert Dich beim DRK einzubringen?'
 
-    context = {'form': form, 'title': title}
+    context = {'form': form, 'title': title, 'error_message': error_message}
     return render(request, 'survey/profile_data.html', context)
 
 
 def skip(request):
+  error_message = ""
   """ Check if skill and interest form data is stored in session """
   if 'interests_post' not in request.session:  # interests were not provided yet, redirect to interests view
     return HttpResponseRedirect(reverse('interests'))
   elif 'skills_post' not in request.session:  # skills were not provided yet, redirect to skills view
     return HttpResponseRedirect(reverse('skills'))
-
   else:  # interests and skills are provided --> proceed with profile data
 
     if 'profile_post' in request.session:
@@ -138,14 +139,14 @@ def skip(request):
       restored_form_data = {}
 
     if request.method == 'POST':
+      request.session['profile_post'] = request.POST
       form = SkipForm(request.POST)
       if form.is_valid():
-        request.session['profile_post'] = request.POST
-
-        safe_all_forms(request.session)
+        safe_all_forms(request.session, skip_profile=True)
         clear_session(request)
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
+        error_message = "Bitte gib eine korrekte E-Mail Adresse an."
         form = SkipForm(restored_form_data)
 
     else:
@@ -157,7 +158,7 @@ def skip(request):
       else:
         form = SkipForm(restored_form_data)
 
-    context = {'form': form}
+    context = {'form': form, 'error_message': error_message}
     return render(request, 'survey/skip.html', context)
 
 
