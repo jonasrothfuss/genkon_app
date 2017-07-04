@@ -7,11 +7,21 @@
 <div class="container">
 <div class="jumbotron">
 
-    <h2> {{thank_you_text}} </h2>
-       {% if further_note != "" %}
-           <p></p>
-           <p class="lead">{{further_note}}</p>
-       {% endif %}
+    <h2> Schade, dass wir nichts für dich finden konnten </h2>
+    <p> Kommt für Dich diese Möglichkeit noch in Frage? </p>
+</div>
+    </div>
+<div class="container">
+    <div class="jumbotron">
+    <h2> Helfer auf Abruf </h2>
+    Man ist dabei nicht regelmäßig eingebunden. Wir würden Dich aber gerne anschreiben, wenn
+        <li> Helfermangel bei einer Umweltkatastrophe wie z.B. einer Überschwemmungen besteht </li>
+        <li> Kurzfristige Ausfälle zu personalen Schwierigkeiten führen </li>
+        <li> Bei DRK-Veranstaltungen Unterstützung gebraucht wird</li>
+
+
+    <h6> Keine Sorge, dies ist keine Anmeldung in einen Newsletter und die Anmeldung ist unverbindlich. </h6>
+
 
     <form action={% url 'skip' %} method="post">
     {% csrf_token %}
@@ -45,7 +55,11 @@
             </div>
 
     {% endfor %}
-
+    {% if error_message %}
+        <div class="alert alert-danger">
+          {{ error_message }}
+        </div>
+    {% endif %}
 
              <div class="row">
                 <div class="col-xs-12">
