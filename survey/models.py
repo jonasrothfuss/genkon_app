@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils import timezone
-import os
+import os, collections
 import numpy as np
 import pandas as pd
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 import glob
+from pprint import pprint
 
 fs = FileSystemStorage(location="static")
 
@@ -122,13 +123,21 @@ class Profile(models.Model):
     return self.first_name + " " + self.last_name
 
   @staticmethod
-  def get_df(empty_profiles=True, choice_selection=True, selection=False, selected_profile=None):
+  def get_df(empty_profiles=True, choice_selection=True, selected_profile=None):
+    """
+    generates a dataframe that lists the profiles with their information (addrss, email ...) provided and (optionally) their
+    corresponding choices with regard to questions
+    :param empty_profiles: indicates whether dummy profiles shall be included in the df as well
+    :param choice_selection: indicates whether columns that depict the choices (answers to questions) shall be included in the df
+    :param selected_profile: profile_id - if provided it restricts the df to only one user
+    :return:
+    """
     if empty_profiles:
-      profiles = Profile.objects.all()
-    elif selection:
-      profiles = Profile.objects.filter(pk=selected_profile)
+      profiles = Profile.objects.filter(deleted=False)
+    elif selected_profile:
+      profiles = Profile.objects.filter(deleted=False, pk=selected_profile)
     else:
-      profiles = Profile.objects.filter(empty_profile=False)
+      profiles = Profile.objects.filter(deleted=False, empty_profile=False)
     df = pd.DataFrame.from_records(profiles.values())
 
     # rename and reorder df columns
@@ -137,12 +146,13 @@ class Profile(models.Model):
     col_name_replace_dict['selected_service_id'] = 'Gewählter Service'
     df.rename(columns=col_name_replace_dict, inplace=True)
     df = df[['ID', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
+    del df['Dummyprofil']
 
     #replace selected_service_ids with service names
     df['Gewählter Service'] = retrieve_service_names(df['Gewählter Service'])
 
     if choice_selection:
-      choice_selection_df = Profile_Choice_Selection.get_profile_choices_as_df()
+      choice_selection_df = Profile_Choice_Selection.get_profile_choices_as_compiled_df()
       df = df.merge(choice_selection_df,  left_on='ID', right_index=True)
     return df
 
@@ -173,9 +183,14 @@ class Profile_Choice_Selection(models.Model):
 
   @staticmethod
   def get_profile_choices_as_df():
+    """
+      returns Profile_Choices Database Table as pandas dataframe where the index of the df corresponds to the profile id
+      and the columns correspond to the choices. Entries are booleans
+    """
     profiles = Profile.objects.all()
     choices = Choice.objects.all()
     profile_choice_dict = {}
+
     for choice in choices:
       choice_bool_array = []
       for profile in profiles:
@@ -186,6 +201,54 @@ class Profile_Choice_Selection(models.Model):
       profile_choice_dict[choice.choice_text] = choice_bool_array
     df = pd.DataFrame.from_dict(profile_choice_dict)
     df.index = [profile.id for profile in profiles]
+    return df
+
+  @staticmethod
+  def get_profile_choices_as_compiled_df():
+    """
+      returns a compiled version of the Profile_Choices Database Table as pandas dataframe
+      where the index of the df corresponds to the profile id
+      Except for mult_choices_per_row Questions, the Choices of the Profiles corresponding to a Question depicted in one column.
+      The entries are the selected choice texts. For mult_choices_per_row Question, each row in the form is displayed as its own column.
+    """
+    profiles = Profile.objects.all()
+    questions = Question.objects.all()
+    profile_choice_dict = {}
+    print('--- \n \n')
+    for question in questions:
+      choices = Choice.objects.filter(question=question)
+      choice_str_array = []
+
+      # SPECIAL CASE: Multiple Choices per row - handle each row of the form individually
+      if str(question.question_type) == 'mult_choices_per_row':
+        row_choice_dict = collections.defaultdict(list)
+        # make row_choice_dict where each key corresponds to one row in the form
+        for choice in choices:
+          row_choice_dict[choice.choice_text.split("-")[0]].append(choice)
+        for row_choice_text, choices_in_row in row_choice_dict.items():
+          choice_str_array = []
+          for profile in profiles:
+            try:
+              selected_choices = [choice.choice_text.split("-")[1] for choice in choices_in_row if Profile_Choice_Selection.objects.get(profile=profile, choice=choice).selected]
+              choice_str_array.append(", ".join(selected_choices))
+            except:
+              choice_str_array.append("")
+          profile_choice_dict[row_choice_text] = choice_str_array
+
+      # NORMAL CASE:
+      else:
+        for profile in profiles:
+          try:
+            selected_choices = [choice.choice_text for choice in choices if Profile_Choice_Selection.objects.get(profile=profile, choice=choice).selected]
+            choice_str_array.append(", ".join(selected_choices))
+          except:
+            choice_str_array.append("")
+        profile_choice_dict[question.question_text] = choice_str_array
+
+    # Convert profile choice dict into pandas df
+    df = pd.DataFrame.from_dict(profile_choice_dict)
+    df.index = [profile.id for profile in profiles]
+
     return df
 
 def generate_service_choice_scores_randomly():
