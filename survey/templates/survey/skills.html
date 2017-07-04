@@ -13,13 +13,12 @@
          <!-- FORM PART 1-->
          <div class="jumbotron">
             <h2>{{question1.question_text}}</h2>
-            {% for field in form1 %}
-                <div class="row" style="padding-left: 40%;">
-                    <div class="col-xs-12">
-                        <p>{{field}}</p>
-                    </div>
+             <div class="row" style="padding-left: 10%;">
+              {% for field in form1 %}
+                        {{field}}
+             {% endfor %}
                 </div>
-            {% endfor %}
+
 
          </div>
 

@@ -203,7 +203,7 @@ class RowWidgetRenderer(RadioFieldRenderer):
 
 class RowWidgetRendererCheckbox(CheckboxFieldRenderer):
     outer_html = '{content}'
-    inner_html = '<div class="col-xs-12" style="text-align: left"> <div class="checkbox skills"> {choice_value}{sub_widgets}</div> </div>'
+    inner_html = '<div class="col-xs-6" style=""> <div class="checkbox skills"> {choice_value}{sub_widgets}</div> </div>'
 
     def render(self):
         """

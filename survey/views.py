@@ -107,7 +107,7 @@ def profile_data(request):
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
         error_message = "Bitte gib eine korrekte E-Mail Adresse an."
-        form = ProfileDataForm(restored_form_data)
+        form = ProfileDataForm(request.POST)
 
     else:
        if 'empty_profile' in request.GET and int(request.GET['empty_profile'])==1: #user wants to skip the form --> redirect to skip-form
@@ -147,7 +147,7 @@ def skip(request):
         return HttpResponseRedirect(reverse('thank_you_note'))
       else:
         error_message = "Bitte gib eine korrekte E-Mail Adresse an."
-        form = SkipForm(restored_form_data)
+        form = SkipForm(request.POST)
 
     else:
       if 'empty_profile' in request.GET and int(
