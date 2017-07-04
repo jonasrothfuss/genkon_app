@@ -44,6 +44,8 @@ class SkipForm(forms.ModelForm):
         super(SkipForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
                 field.widget.attrs.update({'class' : 'profileform'})
+                if field.label == "Einverständnis":
+                    field.required = True
     class Meta:
         model = Profile
         exclude = ['date_posted', 'phone_number', 'occupation', 'street', 'city',
@@ -216,12 +218,16 @@ class RowChoiceRenderer(RadioFieldRenderer):
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
 
-def safe_all_forms(session, empty_profile=False):
+def safe_all_forms(session, empty_profile=False, skip_profile=False):
     assert 'skills_post' in session
     assert 'interests_post' in session
 
     if empty_profile:#user wants to skip the profile form --> create empty profile object with empty flag set
         profile = Profile.create_empty_profile()
+    elif skip_profile:#user did not fill in all profile data
+        assert 'profile_post' in session
+        profile = SkipForm(session['profile_post']).save()
+
     else:
         assert 'profile_post' in session
         profile = ProfileDataForm(session['profile_post']).save()
