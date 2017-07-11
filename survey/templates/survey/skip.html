@@ -5,24 +5,21 @@
 {% block body %}
 
 <div class="container">
-<div class="jumbotron">
-
-    <h2> Schade, dass wir nichts für dich finden konnten </h2>
-    <p> Kommt für Dich diese Möglichkeit noch in Frage? </p>
+    <div class="jumbotron" style="width:100%">
+    <h3 style="text-align: center"> Schade, dass für dich nichts Passendes dabei war. Vielleicht wäre das etwas für dich?</h3>
 </div>
-    </div>
+</div>
 <div class="container">
-    <div class="jumbotron">
-    <h2> Helfer auf Abruf </h2>
-    Man ist dabei nicht regelmäßig eingebunden. Wir würden Dich aber gerne anschreiben, wenn
-        <li> Helfermangel bei einer Umweltkatastrophe wie z.B. einer Überschwemmungen besteht </li>
-        <li> Kurzfristige Ausfälle zu personalen Schwierigkeiten führen </li>
-        <li> Bei DRK-Veranstaltungen Unterstützung gebraucht wird</li>
-
-
-    <h6> Keine Sorge, dies ist keine Anmeldung in einen Newsletter und die Anmeldung ist unverbindlich. </h6>
-
-
+    <div class="jumbotron" style="width:100%">
+        <h2> Helfer auf Abruf</h2>
+        <p>Für spontane Einsätze brauchen wir Unterstützer, denn kurzfristigen Ausfällen von Ehrenamtlichen, bei Umweltkatastrophen wie z.B. einer Überschwemmungen, oder bei DRK-Veranstaltungen können wir jede helfende Hand gebrauchen.
+    </p>
+    <h5> Keine Sorge, Du bist dabei nicht regelmäßig eingebunden und wir würden dich nur Fragen, wenn wir konkret Helfer benötigen. </h5>
+</div>
+</div>
+<div class="container">
+<div class="jumbotron" style="width:100%">
+     <h2> Unverbindliche Anmeldung </h2>
     <form action={% url 'skip' %} method="post">
     {% csrf_token %}
 
@@ -65,7 +62,7 @@
                 <div class="col-xs-12">
                     <p><a class="btn btn-lg btn-success" href="{% url 'profile_data' %}" role="button">Zurück</a>
                     <a class="btn btn-lg btn-success" href="{% url 'skip' %}?empty_profile=1" role="button">Überspringen</a>
-                    <input type="submit" value="Beenden" class="btn btn-lg btn-success" /></p>
+                    <input type="submit" value="Registrieren" class="btn btn-lg btn-success" /></p>
                 </div>
             </div>
 
