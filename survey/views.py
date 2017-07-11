@@ -55,7 +55,7 @@ def skills(request, num_selectors_skills1=3):
     else:
       form1, form2, form3 = setup_skills_forms(request, num_selectors_skills1)
 
-    context = {'form1': form1, 'form2': form2, 'form3': form3, 'question1': question1, 'question2': question2, 'question3': question3}
+    context = {'form1': form1, 'form2': form2, 'form3': form3, 'question1': question1, 'question2': question2, 'question3': question3, 'max_choices_skills': 3}
     return render(request, 'survey/skills.html', context)
 
   else: #interests were not provided yet, redirect to interests view

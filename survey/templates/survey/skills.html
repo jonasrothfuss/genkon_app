@@ -22,40 +22,14 @@
 
          </div>
 
+         <!-- Limits the number of checkboxes in skill1 form that can be selected -->
          <script>
-         window.setInterval(begrenze, 1);
-         var els2 = [];
-         function begrenze(){
-             var els = document.getElementsByName("skills1");
-             var total = 0;
-
-            for (var i = 0; i <els.length; i++){
-             if(els[i].checked ){
-                els2.push(els[i]);
-                total++;
-                console.log("Hab gechecked");
+            var limit = {{max_choices_skills}};
+            $('input[name=skills1]').on('change', function(evt) {
+                if(jQuery("input[name=skills1]:checked").length > limit) {
+                        this.checked = false;
                 }
-            }
-
-            if(total >3){
-
-                console.log("DRIN");
-                for (var i =0; i < els.length ; i++){
-
-                    if(els[i].checked){
-                        els[i].checked = false;
-                        break;
-                    }
-                    else{
-                        continue;
-                    }
-                }
-             }
-
-
-          }
-
-
+            });
 
 
          </script>
