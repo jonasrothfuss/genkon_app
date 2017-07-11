@@ -5,12 +5,12 @@
 {% block body %}
 
 <div class="container">
-    <div class="jumbotron" style="width:100%">
+    <div class="jumbotron" style="width:100%; max-width:500px">
     <h3 style="text-align: center"> Schade, dass für dich nichts Passendes dabei war. Vielleicht wäre das etwas für dich?</h3>
 </div>
 </div>
 <div class="container">
-    <div class="jumbotron" style="width:100%">
+    <div class="jumbotron" style="width:100%; max-width:500px">
         <h2> Helfer auf Abruf</h2>
         <p>Für spontane Einsätze brauchen wir Unterstützer, denn kurzfristigen Ausfällen von Ehrenamtlichen, bei Umweltkatastrophen wie z.B. einer Überschwemmungen, oder bei DRK-Veranstaltungen können wir jede helfende Hand gebrauchen.
     </p>
@@ -18,7 +18,7 @@
 </div>
 </div>
 <div class="container">
-<div class="jumbotron" style="width:100%">
+<div class="jumbotron" style="width:100%; max-width:500px">
      <h2> Unverbindliche Anmeldung </h2>
     <form action={% url 'skip' %} method="post">
     {% csrf_token %}
