@@ -1,39 +1,57 @@
 {% extends "base.html" %}
 
-
-
 {% block body %}
+  
+ <script>
 
+    function overlay_off() {
+        document.getElementById("overlay").style.display = "none";
+    }
 
+    function overlay_on(param) {
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("inner_overlay").innerHTML = document.getElementById(param.getAttribute("name")).innerHTML;
+    }
 
+</script>
+  
+  
+<!-- {{service.service_description}} -->
   
 {% if matched_services_list %}
 <div class="container" style="padding: 15px">   
 <div class="row" style="width: 100%;">
 
+<div id="overlay" onclick="overlay_off()">
+    <div class="centered">
+            <h3 class="top-right">X</h3>
+            <h5 id="inner_overlay" class="jumbotron services"></h5>
+    </div>
+</div>
+
     {% for service in matched_services_list %}
     <form action={% url 'results' %} method="post">
     {% csrf_token %}
+    <div id={{service.id}} style="display: none">{{service.service_description}}</div>
     <div class="col-md-6 col-xs-12 col-lg-6" style="padding:10px;">
         <div class="jumbotron services">
             <h2 style="height: 60px;">{{service.service_title}}</h2>
-            <div class="img-wrapper" style="width: 100%;">
-            <div id="f1_container">
+            <div id="f1_container" name={{service.id}} var=service.service_description onclick="overlay_on(this)">
                 <div id="f1_card" class="shadow">
                     <div class="front face">
-                        <img src="/static/{{service.service_image}}" alt="My image" style=" width:100%"/>
-                    </div>
-                    <div class="back face center">
-                        <h5>{{service.service_description}}</h5>
+                        <img src="/static/{{service.service_image}}" alt="My image" style="width: 100%; position: static; top: 0;"/>
                     </div>
                 </div>
             </div>
-            </div>
+            
             <h4 style="height: 57px;">{{service.service_subtitle}}</h4>
             <div class="row">
             <div class="col-xs-12">
                 <input type='hidden' name='service' value='{{service.pk}}'/>
-                <input type="submit" value="Auswählen", class="btn btn-lg btn-success" />
+                <p>
+                    <input name={{service.id}} onclick="overlay_on(this)" value="Details", class="btn btn-lg btn-success" style="width: 30%" />
+                    <input type="submit" value="Auswählen", class="btn btn-lg btn-success" style="width: 30%"/>
+                </p>
             </div>
             </div>
         </div>
