@@ -145,7 +145,7 @@ class Profile(models.Model):
     del col_name_replace_dict['selected_service']
     col_name_replace_dict['selected_service_id'] = 'Gewählter Service'
     df.rename(columns=col_name_replace_dict, inplace=True)
-    df = df[['ID', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
+    df = df[['ID', 'Datum', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
     del df['Dummyprofil']
 
     #replace selected_service_ids with service names
