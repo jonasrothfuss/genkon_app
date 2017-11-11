@@ -118,6 +118,8 @@ class Profile(models.Model):
   assigned = models.CharField("Im Einsatz bei", max_length=100, blank=True)
   remarks = models.TextField("Bearbeitungsnotizen", blank=True)
 
+  STATUS_CHOICES = [("open", "offen"), ("accepted", "aufgenommen"), ("cancelled", "abgebrochen")]
+  status = models.CharField("Status", blank=True, max_length=30, choices=STATUS_CHOICES)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
@@ -145,7 +147,7 @@ class Profile(models.Model):
     del col_name_replace_dict['selected_service']
     col_name_replace_dict['selected_service_id'] = 'Gewählter Service'
     df.rename(columns=col_name_replace_dict, inplace=True)
-    df = df[['ID', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
+    df = df[['ID', 'Datum', 'Vorname', 'Nachname', 'Beruf', 'Gewählter Service', 'E-Mail', 'Telefonnummer', 'Adresse', 'Stadt', 'PLZ', 'Persönliche Nachricht', 'Dummyprofil']]
     del df['Dummyprofil']
 
     #replace selected_service_ids with service names
@@ -270,6 +272,17 @@ def df_from_csv(csv_dir, model, expected_cols = []):
         raise AssertionError("Could not parse CSV properly - expected the following columns:" + str(expected_cols))
 
 def load_data_from_csv(csv_dir):
+  assert os.path.isdir(csv_dir), 'csv_dir must be a directory'
+  assert os.path.isdir(os.path.join(csv_dir, 'images')), 'csv_dir must contain an image directory'
+  assert 'Question.csv' in os.listdir(csv_dir), "Question.csv must be in csv_dir"
+  assert 'Choice.csv' in os.listdir(csv_dir)
+  assert 'Service.csv' in os.listdir(csv_dir)
+  assert 'Score.csv' in os.listdir(csv_dir)
+
+  #clear the db tables befor loading new data into them
+  clear_db_tables()
+  print('--- CLEARED TABLES SUCCESSFULLY')
+
   image_dir = os.path.join(csv_dir, 'images')
   Question.save_df_data(df_from_csv(csv_dir, 'Question', ['pk', 'question_identifier', 'question_text', 'question_type']))
   print('--- SAVED QUESTIONS SUCCESSFULLY')
@@ -285,6 +298,13 @@ def load_data_from_csv(csv_dir):
   print('--- SAVED SCORES SUCCESSFULLY')
 
   print('Data successfully stored in the database')
+
+def clear_db_tables():
+  # clears the db relations Question, Choice, Service and Service_Choice_Score
+  Question.objects.all().delete()
+  Choice.objects.all().delete()
+  Service.objects.all().delete()
+  Service_Choice_Score.objects.all().delete()
 
 def retrieve_service_names(service_ids):
   service_names = []

@@ -17,7 +17,7 @@ class ProfileDataForm(forms.ModelForm):
                 field.required = True
     class Meta:
         model = Profile
-        exclude = ['date_posted', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned']
+        exclude = ['date_posted', 'selected_service', 'empty_profile', 'remarks', 'deleted', 'assigned', 'status']
         
 
 class NewProfileForm(forms.ModelForm):
@@ -117,8 +117,6 @@ class SkillsForm1(BaseChoiceForm):
         selected_pk = int(self.data["skills1"])
         return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
 
-
-
 class SkillsForm2(BaseChoiceForm):
     def __init__(self, *args, **kwargs):
         super(SkillsForm2, self).__init__(*args, **kwargs)
@@ -161,6 +159,10 @@ class SkillsForm3(BaseChoiceForm):
         return [(c, c.pk == selected_pk) for c in self.question.get_choices()]
 
 
+#
+# Customized Renderers / Widgets
+#
+
 class RowWidgetRenderer(RadioFieldRenderer):
     outer_html = '{content}'
     inner_html = '<div class="col-xs-2" style="text-align: center"> <div class="checkbox"> {choice_value}{sub_widgets}</div> </div>'
@@ -199,7 +201,6 @@ class RowWidgetRenderer(RadioFieldRenderer):
             id_attr=format_html(' id="{}"', id_) if id_ else '',
             content=mark_safe('\n'.join(output)),
         )
-
 
 class RowWidgetRendererCheckbox(CheckboxFieldRenderer):
     outer_html = '{content}'
@@ -250,7 +251,6 @@ class RowChoiceRenderer(RadioFieldRenderer):
 
 class RowChoiceWidget(forms.RadioSelect):
     renderer = RowChoiceRenderer
-
 
 class RowChoiceWidget2(forms.CheckboxSelectMultiple):
     renderer = RowWidgetRendererCheckbox
