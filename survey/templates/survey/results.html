@@ -33,9 +33,17 @@
             </div>
 </div>
 
+<script>
+    function overlay_off() {
+         document.getElementById("overlay").style.display = "none";
+     }
+    function overlay_on(param) {
+         document.getElementById("overlay").style.display = "block";
+         document.getElementById("inner_overlay").innerHTML = document.getElementById(param.getAttribute("name")).innerHTML;
+     }
+</script>
+  
 
-  
-  
 <!-- {{service.service_description}} -->
 
   
