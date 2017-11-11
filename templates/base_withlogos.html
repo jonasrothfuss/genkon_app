@@ -1,0 +1,45 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+{% load google_analytics %}
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <title>Ehrenamtgenerator</title>
+    {% include 'stylesheets.html' %}
+    {% include 'javascripts.html' %}
+{% google_analytics %}
+</head>
+<body>
+    <p></p>
+
+     {% block body %}
+        <h3> This is the base page</h3>
+     {% endblock %}
+    <div class="push"></div>
+
+    <footer class="footer">
+    <div class="container" >
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
+         <p class="text-muted" style="margin: 10px">Powered by</p>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
+            <a class="images_class" rel="images">
+            <img src="/static/images/DRK_Logo2.svg"    alt="My image" style="max-width: 200px; max-height: 100%; margin: 10px"/>
+            </a>
+     </div>
+     <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 vcenter">
+            <a class="images_class" style="margin: 10px" rel="images">
+            <img src="/static/images/Generationenkontakt.png"    alt="My image" style="max-width: 90px; max-height: 100%;"/>
+            </a>
+     </div> 
+     </div>
+ </div>
+   
+    </footer>
+</body>
+</html>
