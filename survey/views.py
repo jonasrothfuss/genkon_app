@@ -79,7 +79,9 @@ def results(request):
         num_services = 4
 
       num_services_extend = num_services + 4
+
       matched_services_list = find_matched_services(request.session, num_services=num_services)
+             
       context = {'matched_services_list': matched_services_list, 'num_services': num_services_extend}
       return render(request, 'survey/results.html', context)
 
