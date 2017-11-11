@@ -3,170 +3,314 @@
 
 {% block body %}
 
-    <div class="container">
+<div class="container">
 
-      <div class="jumbotron" style="width: 100%; max-width: none; min-width: 1000px">
-          <div class="container" style="width: 100%">
-              <h2 style="margin: 0 auto">Registrierte Helfer</h2>
-          </div>
-          <div class="container" style="width: 100%">
-              <div class="col-xs-4">
-                  <label>Leere Profile anzeigen:
-                      <input type="checkbox" id="emptycheck">
-                  </label>
-              </div>
-              <div class="col-xs-4">
-                  <form action="select.htm">
-                  <label>Status:
+    <div class="jumbotron" style="width: 100%; max-width: none; min-width: 1000px">
+        <div class="container" style="width: 100%">
+            <h2 style="margin: 0 auto">Registrierte Helfer</h2>
+        </div>
+        <div class="container" style="width: 100%">
+            <div class="col-xs-4">
+                <label>Leere Profile anzeigen:
+                    <input type="checkbox" id="emptycheck">
+                </label>
+            </div>
+            <div class="col-xs-4">
+                <form action="select.htm">
+                    <label>Status:
                         <select id="currentstatus" onchange="filter()">
-                            <option value="alle">Alle</option>
-                            <option value="offen">Offen</option>
-                            <option value="aufgenommen">Aufgenommen</option>
-                            <option value="abgebrochen">Abgebrochen</option>
+                            <option value="all">Alle</option>
+                            <option value="open">Offen</option>
+                            <option value="accepted">Aufgenommen</option>
+                            <option value="cancelled">Abgebrochen</option>
                         </select>
-		            </label>
-                  </form>
-              </div>
-              <div class="col-xs-4">
-                <input type="text" id="myInput" style="margin-top: 12px; float: right" onkeyup="filter()" placeholder="Tabelle durchsuchen..">
-              </div>
-          </div>
-          
-          <table id="myTable" class="profiletable">
+                    </label>
+                </form>
+            </div>
+            <div class="col-xs-4">
+                <input type="text" id="myInput" style="margin-top: 12px; float: right" onkeyup="filter()"
+                       placeholder="Tabelle durchsuchen..">
+            </div>
+        </div>
+
+        <table id="myTable" class="profiletable">
             <tr>
                 <th style="width: 64px">Details</th>
                 <th style="width: 100px">Datum</th>
                 <th>Vorname</th>
                 <th>Nachname</th>
                 <th style="width: 64px">PLZ</th>
-                <th style="width: 120px">Stadt</th>
-                <th style="width: 150px">E-Mail</th>
+                <th style="width: 100px">Stadt</th>
+                <th style="width: 180px">E-Mail</th>
                 <th>Telefonnummer</th>
                 <th>Im Einsatz bei</th>
             </tr>
 
             {% for profile in activeprofiles %}
-                <tr>
-                    <td style="text-align: center; width: 64px"> <a class="btn btn-lg btn-success" style="font-size: 20px; padding-left: 20px;padding-right: 20px; margin: 0px" href="{% url 'profile_detail' %}?selected_profile={{profile.pk}}" role="button">+</a> </td>
-                    <td style="width: 100px"> {{ profile.date_posted }} </td> 
-                    <td> {{ profile.first_name }} </td> 
-                    <td> {{ profile.last_name }}  </td> 
-                    <td style="width: 64px"> {{ profile.zip_code }}  </td> 
-                    <td style="width: 120px"> {{ profile.city }}  </td> 
-                    <td style="width: 150px"> <a style="justify-content: left" href="mailto:{{ profile.email }} ">{{ profile.email }}</a>  </td>
-                    <td> <a style="justify-content: left" href="tel:+49{{ profile.phone_number }}"> {{ profile.phone_number }} </a></td>
-                    <td> {{ profile.assigned }} </td>
-                </tr>
+            <tr class={{ profile.status }}>
+                <td style="text-align: center; width: 64px"><a class="btn btn-lg btn-success"
+                                                               style="font-size: 20px; padding-left: 20px;padding-right: 20px; margin: 0px"
+                                                               href="{% url 'profile_detail' %}?selected_profile={{profile.pk}}"
+                                                               role="button">+</a></td>
+                <td class={{ profile.status }} style="width: 100px"> {{ profile.date_posted }}</td>
+                <td class={{ profile.status }}> {{ profile.first_name }}</td>
+                <td class={{ profile.status }}> {{ profile.last_name }}</td>
+                <td class={{ profile.status }} style="width: 64px"> {{ profile.zip_code }}</td>
+                <td class={{ profile.status }} style="width: 100px"> {{ profile.city }}</td>
+                <td class={{ profile.status }} style="width: 180px"> <a style="justify-content: left" href="mailto:{{ profile.email }} ">{{ profile.email }}</a>  </td>
+                <td class={{ profile.status }}> <a style="justify-content: left" href="tel:+49{{ profile.phone_number }}"> {{ profile.phone_number }} </a></td>
+                <td class={{ profile.status }}> {{ profile.assigned }}</td>
+            </tr>
             {% endfor %}
-          </table>
-        
-          <div class="row">
-                <div class="col-xs-12">
-                    <p>
-                        <a class="btn btn-lg btn-success" href="{% url 'profile_csv' %}" role="button">Herunterladen</a>
-                        <a class="btn btn-lg btn-success" href="{% url 'profile_new' %}" role="button">Helfer hinzufügen</a>
-                        <a class="btn btn-lg btn-success" href="{% url 'logout' %}" role="button">Abmelden</a>
-                    </p>
-                </div>
-          </div>
-      </div>
+        </table>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <p>
+                    <a class="btn btn-lg btn-success" href="{% url 'scores' %}" role="button">Bewertungen bearbeiten</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'profile_csv' %}" role="button">Herunterladen</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'profile_new' %}" role="button">Helfer hinzufügen</a>
+                    <a class="btn btn-lg btn-success" href="{% url 'logout' %}" role="button">Abmelden</a>
+                </p>
+            </div>
+        </div>
     </div>
+</div>
 
-    <script>
+<script>
     function filter() {
-      // Declare variables  
-      console.log("filtering")
-      var input, filter, table, tr, td, i;
-        
-      empty =  document.getElementById('emptycheck').checked;
-      var str = document.getElementById('currentstatus').value;
-       console.log(empty) 
-        console.log(str) 
-    
-      input = document.getElementById("myInput");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-    
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td1 = tr[i].getElementsByTagName("td")[1];
-        td2 = tr[i].getElementsByTagName("td")[2];
-        td3 = tr[i].getElementsByTagName("td")[3];
-        td4 = tr[i].getElementsByTagName("td")[4];
-        td5 = tr[i].getElementsByTagName("td")[5];
-        td6 = tr[i].getElementsByTagName("td")[6];
-        td7 = tr[i].getElementsByTagName("td")[7];
-        td8 = tr[i].getElementsByTagName("td")[8];
-        if (td1) {
-            if (empty){
-                if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else {
-                    tr[i].style.display = "none";
-                }
-            }
-            else{
-                if(td6.innerHTML.toUpperCase().indexOf("EMPTY") > -1){
-                    tr[i].style.display = "none";
-                }
-                else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                }
-                else {
-                    tr[i].style.display = "none";
-                }
-            }
+        // Declare variables
+        console.log("filtering")
+        var input, filter, table, tr, td, i;
 
+        empty = document.getElementById('emptycheck').checked;
+        var str = document.getElementById('currentstatus').value;
+
+        console.log(empty)
+        console.log(str)
+
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            var status = tr[i].className
+            td1 = tr[i].getElementsByTagName("td")[1];
+            td2 = tr[i].getElementsByTagName("td")[2];
+            td3 = tr[i].getElementsByTagName("td")[3];
+            td4 = tr[i].getElementsByTagName("td")[4];
+            td5 = tr[i].getElementsByTagName("td")[5];
+            td6 = tr[i].getElementsByTagName("td")[6];
+            td7 = tr[i].getElementsByTagName("td")[7];
+            td8 = tr[i].getElementsByTagName("td")[8];
+            if (td1) {
+                if (str == 'all') {
+                    if (empty) {
+                        if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                    else {
+                        if (td6.innerHTML.toUpperCase().indexOf("EMPTY") > -1) {
+                            tr[i].style.display = "none";
+                        }
+                        else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+                else if (str == 'open'){
+                    if (status == 'cancelled'){
+                        tr[i].style.display = "none";
+                    }
+                    else if(status == 'accepted'){
+                        tr[i].style.display = "none";
+                    }
+                    else if (empty) {
+                        if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                    else {
+                        if (td6.innerHTML.toUpperCase().indexOf("EMPTY") > -1) {
+                            tr[i].style.display = "none";
+                        }
+                        else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+                else if (status !== str) {
+                    tr[i].style.display = "none";
+                }
+                else if (empty) {
+                    if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else {
+                        tr[i].style.display = "none";
+                    }
+                }
+                else {
+                    if (td6.innerHTML.toUpperCase().indexOf("EMPTY") > -1) {
+                        tr[i].style.display = "none";
+                    }
+                    else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td3.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td4.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td5.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td6.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td7.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (td8.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else {
+                        tr[i].style.display = "none";
+                    }
+                }
+
+            }
         }
-      }
     }
-        
+
     $('input').click();
-    $('input').on('change', function(e) {filter();});
-    </script>
+    $('input').on('change', function (e) {
+        filter();
+    });
+</script>
 
 {% endblock %}
