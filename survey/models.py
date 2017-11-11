@@ -118,6 +118,8 @@ class Profile(models.Model):
   assigned = models.CharField("Im Einsatz bei", max_length=100, blank=True)
   remarks = models.TextField("Bearbeitungsnotizen", blank=True)
 
+  STATUS_CHOICES = [("open", "offen"), ("accepted", "aufgenommen"), ("cancelled", "abgebrochen")]
+  status = models.CharField("Status", blank=True, max_length=30, choices=STATUS_CHOICES)
 
   def __str__(self):
     return self.first_name + " " + self.last_name
