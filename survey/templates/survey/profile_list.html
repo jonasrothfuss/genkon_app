@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<div class="container">
+<div class="container.profilelist">
 
     <div class="jumbotron" style="width: 100%; max-width: none; min-width: 1000px">
         <div class="container" style="width: 100%">
@@ -67,13 +67,28 @@
         <div class="row">
             <div class="col-xs-12">
                 <p>
-                    <a class="btn btn-lg btn-success" href="{% url 'scores' %}" role="button">Bewertungen bearbeiten</a>
                     <a class="btn btn-lg btn-success" href="{% url 'profile_csv' %}" role="button">Herunterladen</a>
                     <a class="btn btn-lg btn-success" href="{% url 'profile_new' %}" role="button">Helfer hinzufügen</a>
                     <a class="btn btn-lg btn-success" href="{% url 'logout' %}" role="button">Abmelden</a>
                 </p>
             </div>
         </div>
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron" style="max-width: none; min-width: 0px">
+            <div class="row">
+            <h2 style="margin: 0 auto">Administration</h2>
+            </div>
+            <div class="row">
+            <div class="col-xs-12">
+                <p>
+                        <a class="btn btn-lg btn-success" href="http://ehrenamtsgenerator.generationenkontakt.de/admin/login/" role="button">Fragebogen konfigurieren</a>
+                <a class="btn btn-lg btn-success" href="{% url 'scores' %}" role="button">Bewertungen einsehen</a>
+                </p>
+            </div>
+            </div>
+
     </div>
 </div>
 
