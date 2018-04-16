@@ -16,3 +16,8 @@
 * `$ bower install`
 * `$ python manage.py migrate`
 * `$ python manage.py runserver`
+
+
+## Loading initial data into the database
+
+python manage.py load_data_from_csv <data_dir>
