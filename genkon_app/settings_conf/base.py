@@ -24,6 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 # Application definition
 
 INSTALLED_APPS = [
+    'storages',
     'analytical',
     'django_db_logger',
     'survey.apps.SurveyConfig',
@@ -120,6 +121,11 @@ STATICFILES_DIRS = (
 # )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = '9-KIWRX_GGsAAAAAAAGdMfW44_gk0-pVuLZc4TVWH75rq5kRl3Q4qiA3b6ITBcPY'
+DROPBOX_ROOT_PATH ='.'
+
 
 # Auth setting
 LOGIN_REDIRECT_URL = '/survey/profile_list'
