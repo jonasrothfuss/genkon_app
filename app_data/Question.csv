@@ -1,0 +1,5 @@
+pk,question_identifier,question_text,question_type
+1,skills1,Welche Fähigkeiten möchtest du einbringen?,
+2,skills2,Wie oft möchtest du dich einbringen?,
+3,interests,Für welche Themen interessierst Du dich?,mult_choices_per_row
+4,skills3,Welcher Altersgruppe gehörst du?,

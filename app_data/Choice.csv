@@ -1,0 +1,39 @@
+pk;question_fk;choice_text
+1;3;Senioren-Sehr Interessiert
+2;3;Senioren-Interessiert
+3;3;Senioren-Weniger Interessiert
+4;3;Jugendliche-Sehr Interessiert
+5;3;Jugendliche-Interessiert
+6;3;Jugendliche-Weniger Interessiert
+7;3;Tiere-Sehr Interessiert
+8;3;Tiere-Interessiert
+9;3;Tiere-Weniger Interessiert
+10;3;Migration und Integration-Sehr Interessiert
+11;3;Migration und Integration-Interessiert
+12;3;Migration und Integration-Weniger Interessiert
+13;3;Medien und Technik-Sehr Interessiert
+14;3;Medien und Technik-Interessiert
+15;3;Medien und Technik-Weniger Interessiert
+16;3;Direkter Kontakt zu Menschen-Sehr Interessiert
+17;3;Direkter Kontakt zu Menschen-Interessiert
+18;3;Direkter Kontakt zu Menschen-Weniger Interessiert
+19;1;Einfühlvermögen
+20;1;Flexibilität
+21;1;Führerschein
+22;1;Handwerkliche Fähigkeiten
+23;1;Hauswirtschaftliche Fähigkeiten
+24;1;Informatikkenntnisse
+25;1;Kochen und Backen
+26;1;Medizinische Ausbildung
+27;1;Sprachkenntnisse
+28;1;Video und Tontechnik
+29;2;gelegentlich
+30;2;häufiger
+31;2;wöchentlich
+32;1;Organisationstalent
+33;2;nie
+34;4;Jugendliche (unter 18)
+35;4;Junge Erwachsene (19 - 30)
+36;4;Erwachsene (31 - 60)
+37;4;Jung gebliebene (über 60)
+38;1;Kurzfristig verfügbar
