@@ -9,9 +9,6 @@
     "start": "node web.js",
     "postinstall": "bower cache clean && bower install"
   },
-  "scripts": {
-    "postinstall": "chmod +x ./scripts/postInstall.sh && ./scripts/postInstall.sh"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jonasrothfuss/genkon_app.git"
