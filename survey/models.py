@@ -6,6 +6,7 @@ import pandas as pd
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 import glob
+from genkon_app.settings import STATICFILES_DIRS
 from pprint import pprint
 
 fs = FileSystemStorage(location="static")
@@ -97,6 +98,8 @@ class Service(models.Model):
         service_unsalaried=bool(record['service_unsalaried']),
       )
       service.service_image.save(record['service_image'],  File(open(os.path.join(image_dir, record['service_image']), 'rb')))
+      pprint(os.listdir(STATICFILES_DIRS[0] + '/services'))
+      print('\n')
       service_objects.append(service)
     #Service.objects.bulk_create(service_objects)
 
