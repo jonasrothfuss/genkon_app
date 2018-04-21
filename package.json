@@ -6,7 +6,10 @@
     "node": "6.10.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node web.js",
+    "postinstall": "bower cache clean && bower install"
+  },
+  "scripts": {
     "postinstall": "chmod +x ./scripts/postInstall.sh && ./scripts/postInstall.sh"
   },
   "repository": {
