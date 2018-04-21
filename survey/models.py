@@ -98,11 +98,11 @@ class Service(models.Model):
         service_unsalaried=bool(record['service_unsalaried']),
       )
       service.service_image.save(record['service_image'],  File(open(os.path.join(image_dir, record['service_image']), 'rb')))
-      print(STATICFILES_DIRS[0])
-      pprint(os.listdir(STATICFILES_DIRS[0] + '/services'))
-      print('\n')
+      #print(STATICFILES_DIRS[0])
+      #pprint(os.listdir(STATICFILES_DIRS[0] + '/services'))
+      #print('\n')
       service_objects.append(service)
-    Service.objects.bulk_create(service_objects)
+    #Service.objects.bulk_create(service_objects)
 
 class Profile(models.Model):
   date_posted = models.DateField("Datum", default=timezone.now)
