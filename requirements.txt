@@ -1,5 +1,6 @@
 appdirs==1.4.3
 dj-static==0.0.6
+dj-database-url==0.5.0
 Django==1.10.6
 django-appconf==1.0.2
 djangorestframework==3.6.2
