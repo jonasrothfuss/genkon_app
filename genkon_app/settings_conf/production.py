@@ -52,8 +52,8 @@ LOGGING = {
 }
 
 #TODO: HTTPS
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
