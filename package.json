@@ -5,8 +5,10 @@
   "engines": {
     "node": "6.10.2"
   },
+  "dependencies": {
+    "bower": "1.8.0"
+  },
   "scripts": {
-    "start": "node web.js",
     "postinstall": "bower cache clean && bower install"
   },
   "repository": {
@@ -18,7 +20,4 @@
     "url": "https://github.com/jonasrothfuss/genkon_app/issues"
   },
   "homepage": "https://github.com/jonasrothfuss/genkon_app",
-  "dependencies": {
-    "bower": "1.8.0"
-  }
 }
