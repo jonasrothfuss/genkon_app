@@ -51,7 +51,14 @@ LOGGING = {
     }
 }
 
-#TODO: HTTPS
+# AWS S3 Filestorage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIQIHU3PO3JX44HJQ')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'genkon-app-storage')
+
+
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
