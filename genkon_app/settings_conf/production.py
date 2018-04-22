@@ -50,12 +50,19 @@ LOGGING = {
     }
 }
 
+aws_secret_key_file = os.path.join(BASE_DIR,'genkon_app/aws_secret_key.txt')
+if os.path.isfile(aws_secret_key_file) :
+    with open() as f:
+        aws_secret_key = f.read().strip()
+else:
+    aws_secret_key = None
+
+
 # AWS S3 Filestorage
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIQIHU3PO3JX44HJQ')
-with open(os.path.join(BASE_DIR,'genkon_app/aws_secret_key.txt')) as f:
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', f.read().strip())
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', aws_secret_key)
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'genkon-app-storage')
 
 
