@@ -6,10 +6,10 @@ import pandas as pd
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 import glob
-from genkon_app.settings import STATICFILES_DIRS
+from custom_storages import MediaStorage
 from pprint import pprint
 
-fs = FileSystemStorage(location="static")
+media_storage = MediaStorage()
 
 class Question(models.Model):
   question_identifier = models.CharField(max_length=10)
@@ -75,7 +75,7 @@ class Service(models.Model):
   service_description = models.CharField(max_length=2000)
   service_urgency = models.IntegerField()
   service_unsalaried = models.BooleanField()
-  service_image = models.ImageField(upload_to="services", storage=fs)
+  service_image = models.ImageField(upload_to="services", storage=media_storage)
 
   def __str__(self):
     return self.service_name
