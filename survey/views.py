@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 import numpy as np
 import math
 from pprint import pprint
-
+from genkon_app.settings import *
 
 """ VIEWS """
 
@@ -82,7 +82,7 @@ def results(request):
 
       matched_services_list = find_matched_services(request.session, num_services=num_services)
              
-      context = {'matched_services_list': matched_services_list, 'num_services': num_services_extend}
+      context = {'matched_services_list': matched_services_list, 'num_services': num_services_extend, 'media_url': MEDIA_URL}
       return render(request, 'survey/results.html', context)
 
 def profile_data(request):

@@ -72,6 +72,9 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'genkon-app-
 S3_USE_SIGV4 = True
 AWS_QUERYSTRING_AUTH = False
 
+AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_CLOUDFRONT_DOMAIN', 'd23ftheat9c160.cloudfront.net')
+
+MEDIA_URL = 'https://' + AWS_S3_CUSTOM_DOMAIN +'/%s/' % MEDIAFILES_LOCATION
 
 
 CSRF_COOKIE_SECURE = True
