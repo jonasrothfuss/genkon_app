@@ -65,12 +65,6 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'AKIAIQIHU3PO3JX44HJQ')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', aws_secret_key)
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'genkon-app-storage')
-
-# AWS_DEFAULT_ACL = "public-read"
-# CLOUDFRONT_DOMAIN =	'd23ftheat9c160.cloudfront.net'
-# CLOUDFRONT_ID = "ET5TWD807N8UD"
-# AWS_S3_CUSTOM_DOMAIN = 'd23ftheat9c160.cloudfront.net'
-
 S3_USE_SIGV4 = True
 AWS_QUERYSTRING_AUTH = False
 
